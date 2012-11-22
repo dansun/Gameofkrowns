@@ -4,11 +4,9 @@
 	<persistence-unit name="goodstuffPersistenceUnit" transaction-type="JTA">
       	<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>gameofkrownsDataSource</jta-data-source>
+		<class>org.hackermongo.gameofkrowns.access.domain.Game</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.Player</class>
 		<properties>
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.password" value="gameofkrowns"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1/gameofkrowns"/>
-            <property name="hibernate.connection.username" value="gameofkrowns"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 			<property name="hibernate.max_fetch_depth" value="3" />
 			<property name="hibernate.show_sql" value="true" />

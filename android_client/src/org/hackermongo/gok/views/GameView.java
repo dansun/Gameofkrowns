@@ -1,4 +1,4 @@
-package org.hackermongo.gok;
+package org.hackermongo.gok.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

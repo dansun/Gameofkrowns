@@ -49,10 +49,14 @@ public class MockupApi {
 	 }
 	 
 	 /*
-	  * 
+	  * Gets the invitations that the user is currently involved in
 	  */
 	 public ArrayList<Invitation> getInvitations(String userId, String sessionId) {
 		 return new ArrayList<Invitation>();
+	 }
+	 
+	 public ArrayList<HistoryEvent> getHistory(String userId, String sessionId,long gameId) {
+		 return new ArrayList<HistoryEvent>();
 	 }
 	 
 	

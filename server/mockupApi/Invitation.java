@@ -11,7 +11,7 @@ public class Invitation {
 	public Invitation(String i,Date d,ArrayList<String> inv,boolean a) {
 		id = 1; // This should be unique and generated
 		initiator = i;
-		date = d;
+		date = d; // Martin har en date
 		invitees = inv;
 		allowRandoms = a;
 		randomInvitees = new ArrayList<String>(); // This will be generated and controlled by backend

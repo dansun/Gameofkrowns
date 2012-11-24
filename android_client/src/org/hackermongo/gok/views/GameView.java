@@ -19,12 +19,12 @@ public class GameView extends SurfaceView implements Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		Log.d("LOG_TAG", "GameView.surfaceChanged()");
+		Log.d(getClass().getSimpleName(), "GameView.surfaceChanged()");
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.d("LOG_TAG", "GameView.surfaceCreated()");
+		Log.d(getClass().getSimpleName(), "GameView.surfaceCreated()");
 		final Canvas c = holder.lockCanvas();
 		c.drawARGB(255, 255, 0, 0);
 		holder.unlockCanvasAndPost(c);
@@ -32,6 +32,6 @@ public class GameView extends SurfaceView implements Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.d("LOG_TAG", "GameView.surfaceDestroyed()");
+		Log.d(getClass().getSimpleName(), "GameView.surfaceDestroyed()");
 	}
 }

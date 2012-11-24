@@ -1,10 +1,18 @@
 public class Region {
+	private int id;
+	private String name;
 	private Friend owner;
 	private int opinion;
 	
-	public Region(Friend f, int o) {
+	public Region(int i,String n,Friend f, int o) {
+		id = i; //Serverside keeps track of these ids
+		name = n; //Serverside keeps track of these names
 		owner = f;
 		opinion = o;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Friend getOwner() {

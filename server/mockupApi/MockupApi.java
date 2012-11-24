@@ -41,11 +41,18 @@ public class MockupApi {
 	 }
 	 
 	 /*
-	  * Requests a game to be created. If allowRandoms is true, the server will try to fill out to four players
+	  * Requests the ID for a game to be created. If allowRandoms is true, the server will try to fill out to four players
 	  * with random players looking for games
 	  */
 	 public long createGame(String userId, long sessionId, boolean allowRandoms, ArrayList<String> userids) {
 		 return 0;
+	 }
+	 
+	 /*
+	  * Fetches the game
+	  */
+	 public Game fetchGame(long gameId) {
+		 return new Game();
 	 }
 	 
 	 /*

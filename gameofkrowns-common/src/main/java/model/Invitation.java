@@ -1,3 +1,8 @@
+package org.hackermongo.gok.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Invitation {
 	
 	private long id;
@@ -21,10 +26,10 @@ public class Invitation {
 	}
 	
 	public ArrayList<Invitee> getPlayers() {
-		return invitees;
+		return players;
 	}
 	
 	public boolean getAllowRandoms() {
-		return allowRandoms();
+		return allowRandoms;
 	}
 }

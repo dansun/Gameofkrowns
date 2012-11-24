@@ -1,3 +1,5 @@
+package org.hackermongo.gok.model;
+
 public class Invitee extends Friend {
 	private boolean accepted;
 	

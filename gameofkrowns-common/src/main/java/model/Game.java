@@ -1,3 +1,8 @@
+package org.hackermongo.gok.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Game {
 	private long id;
 	private Date createdDate;
@@ -6,7 +11,12 @@ public class Game {
 	private int turnIndex; // this is 0 if game is not started, 1 if first turn is active, etc
 	
 	public Game() {
+		players = new ArrayList<Player>();
+		Friend f = new Friend();
+		Clan c = new Clan("Lannister");
+		Character ch = new Character("Tyrion");
 		
+		players.add(new Player(f,c,ch));
 	}
 	
 	public long getId() {

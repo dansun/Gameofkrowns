@@ -1,10 +1,11 @@
+package org.hackermongo.gok.model;
+
 public class UserGeneralStatus {
 	private long activeGames;
 	private long nofInvitations;
 	
-	public UserGeneralStatus(long a,long p, long i) {
+	public UserGeneralStatus(long a, long i) {
 		activeGames = a;
-		pendingGames = p;
 		nofInvitations = i;
 	}	
 	

@@ -1,21 +1,28 @@
+package org.hackermongo.gok.model;
+
+import java.util.ArrayList;
+
 public class Region {
 	private int id;
 	private String name;
-	private ArrayList<int> opinion;
+	private ArrayList<Integer> opinion;
 	private int population;
 	
-	public Region(int i,int p,String n,Player f, ArrayList<int> o) {
+	public Region(int i,int p,String n,Player f, ArrayList<Integer> o) {
 		id = i; //Serverside keeps track of these ids
 		name = n; //Serverside keeps track of these names
-		owner = f;
 		opinion = o;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public ArrayList<int> getOpinion() {
+	public ArrayList<Integer> getOpinion() {
 		return opinion;
 	}
 	
@@ -23,11 +30,7 @@ public class Region {
 		return population;
 	}
 	
-	public void setOwner(Friend f) {
-		owner = f;
-	}
-	
-	public void setOpinion(int o) {
+	public void setOpinion(ArrayList<Integer> o) {
 		opinion = o;
 	}
 }

@@ -1,8 +1,10 @@
+package org.hackermongo.gok.model;
+
 public class LoginResult {
 	private long sessionId;
 	private long errorCode;
 	
-	public LoginResult(long s,e) {
+	public LoginResult(long s, long e) {
 		sessionId = s;
 		errorCode = e;
 	}

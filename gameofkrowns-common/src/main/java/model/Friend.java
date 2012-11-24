@@ -1,3 +1,5 @@
+package org.hackermongo.gok.model;
+
 public class Friend {
 	private String userId;
 	private long avatarId;

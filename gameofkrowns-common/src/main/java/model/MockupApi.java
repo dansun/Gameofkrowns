@@ -1,3 +1,5 @@
+package org.hackermongo.gok.model;
+
 import java.util.ArrayList;
 
 public class MockupApi {
@@ -8,7 +10,7 @@ public class MockupApi {
 	 /*
 	  * Returns an object with a valid session id, or an error code
 	  */
-	 public LoginResult authenticate(String userId, Strin password) {
+	 public LoginResult authenticate(String userId, String password) {
 		 return new LoginResult(123,0);
 	 }
 	 
@@ -23,7 +25,7 @@ public class MockupApi {
 	  * Returns the match status for the player
 	  */
 	 public UserGeneralStatus getGeneralStatus(String userId, String sessionId) {
-		 return new UserGeneralStatus(1,2,3);
+		 return new UserGeneralStatus(1,3);
 	 }
 	 
 	 /*

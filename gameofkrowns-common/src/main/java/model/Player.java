@@ -1,10 +1,12 @@
+package org.hackermongo.gok.model;
+
 public class Player {
 	private Friend user;
 	private Clan clan;
 	private Character character;
 	private int finishedTurn; // starts as -1
 	
-	public Player(Friend f,int cl, int ch) {
+	public Player(Friend f,Clan cl, Character ch) {
 		user = f;
 		clan = cl;
 		character = ch;

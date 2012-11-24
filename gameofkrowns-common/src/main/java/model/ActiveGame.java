@@ -1,3 +1,5 @@
+package org.hackermongo.gok.model;
+
 import java.util.Date;
 import java.util.ArrayList;
 

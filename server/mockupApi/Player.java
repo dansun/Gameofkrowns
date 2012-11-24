@@ -2,11 +2,13 @@ public class Player {
 	private Friend user;
 	private Clan clan;
 	private Character character;
+	private int finishedTurn; // starts as -1
 	
 	public Player(Friend f,int cl, int ch) {
 		user = f;
 		clan = cl;
 		character = ch;
+		finishedTurn = -1;
 	}
 	
 	public Friend getUser() {
@@ -19,5 +21,9 @@ public class Player {
 	
 	public Character getCharacter() {
 		return character;
+	}
+	
+	public int getFinishedTurn() {
+		return finishedTurn;
 	}
 }

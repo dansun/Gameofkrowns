@@ -62,9 +62,18 @@ public class MockupApi {
 		 return new ArrayList<Invitation>();
 	 }
 	 
-	 public ArrayList<HistoryEvent> getHistory(String userId, String sessionId,long gameId) {
+	 /*
+	  * Gets the history for the specified turn
+	  */
+	 public ArrayList<HistoryEvent> getHistory(String userId, String sessionId,long gameId,long turnIndex) {
 		 return new ArrayList<HistoryEvent>();
 	 }
 	 
+	 /*
+	  * Performs the action for the user. If action is not allowed, unchanged game obj is returned
+	  */
+	 public Game performAction(String userId,String sessionId,String gameId,String regionId,String actionId) {
+		 return new Game();
+	 }
 	
 }

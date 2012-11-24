@@ -1,10 +1,10 @@
 public class Region {
 	private int id;
 	private String name;
-	private Friend owner;
-	private int opinion;
+	private ArrayList<int> opinion;
+	private int population;
 	
-	public Region(int i,String n,Friend f, int o) {
+	public Region(int i,int p,String n,Player f, ArrayList<int> o) {
 		id = i; //Serverside keeps track of these ids
 		name = n; //Serverside keeps track of these names
 		owner = f;
@@ -15,12 +15,12 @@ public class Region {
 		return name;
 	}
 	
-	public Friend getOwner() {
-		return owner;
+	public ArrayList<int> getOpinion() {
+		return opinion;
 	}
 	
-	public int getOpinion() {
-		return opinion;
+	public int getPopulation() {
+		return population;
 	}
 	
 	public void setOwner(Friend f) {

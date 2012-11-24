@@ -36,8 +36,8 @@ public class MockupApi {
 	 /*
 	  *  Returns the games that are currently active for the user
 	  */
-	 public ArrayList<ActiveGame> getActiveGames(String userId, String password) {
-		 return new ArrayList<ActiveGame>();
+	 public ArrayList<Game> getActiveGames(String userId, String password) {
+		 return new ArrayList<Game>();
 	 }
 	 
 	 /*

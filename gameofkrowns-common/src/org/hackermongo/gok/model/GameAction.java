@@ -1,32 +1,34 @@
 package org.hackermongo.gok.model;
 
 public class GameAction {
+	private long gameId;
+	private long regionId;
+	private long actionId;
 	
-	private int actionType;
-	private String actionMessage;
-	private int opinionChange;
-	private int contentId;
 	
-	public GameAction(int actionType, String actionMessage, int opinionChange, int contentId) {
-		this.actionType = actionType;
-		this.actionMessage = actionMessage;
-		this.opinionChange = opinionChange;
-		this.contentId = contentId;
+	public GameAction(long gameId, long regionId, long actionId) {
+		setGameId(gameId);
+		setRegionId(regionId);
+		setActionId(actionId);
 	}
 	
-	public int getActionType() {
-		return actionType;
+	public long getGameId() {
+		return gameId;
 	}
-	
-	public String getActionMessage() {
-		return actionMessage;
+	private void setGameId(long gameId) {
+		this.gameId = gameId;
+	}
+	public long getRegionId() {
+		return regionId;
+	}
+	private void setRegionId(long regionId) {
+		this.regionId = regionId;
+	}
+	public long getActionId() {
+		return actionId;
+	}
+	private void setActionId(long actionId) {
+		this.actionId = actionId;
 	}
 
-	public int getOpinionChange() {
-		return opinionChange;
-	}
-
-	public int getContentId() {
-		return contentId;
-	}
 }

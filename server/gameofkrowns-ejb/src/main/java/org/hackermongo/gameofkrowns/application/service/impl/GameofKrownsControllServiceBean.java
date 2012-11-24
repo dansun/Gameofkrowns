@@ -254,7 +254,7 @@ public class GameofKrownsControllServiceBean implements GameofKrownsControllServ
 	  * @return Game
 	  */
 	@Override
-	public Game performAction(String userId,String password,String gameId,String regionId,String actionId) {
+	public Game performAction(String userId,String password,long gameId,long regionId,long actionId) {
 		if(actionId == 1) {
 			// Vanligt partiarbete
 		} else if (actionId == 2) {

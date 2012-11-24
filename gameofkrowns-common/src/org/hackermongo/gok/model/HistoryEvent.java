@@ -3,11 +3,11 @@ package org.hackermongo.gok.model;
 public class HistoryEvent {
 	
 	private Friend subject;
-	private GameAction move;
+	private HistoryAction move;
 	private Region region;
 	boolean won;
 	
-	public HistoryEvent(Friend f, GameAction ga, Region r, boolean w) {
+	public HistoryEvent(Friend f, HistoryAction ga, Region r, boolean w) {
 		subject = f;
 		move = ga;
 		region = r;
@@ -18,7 +18,7 @@ public class HistoryEvent {
 		return subject;
 	}
 	
-	public GameAction getMove() {
+	public HistoryAction getMove() {
 		return move;
 	}
 	

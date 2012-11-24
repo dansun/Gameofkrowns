@@ -1,5 +1,10 @@
 package org.hackermongo.gok.model;
 
+/*
+ * OBSOLETE DO NOT USE!!! Use the webservice instead, same stuff but working
+ * 
+ */
+
 import java.util.ArrayList;
 
 public class MockupApi {

@@ -23,7 +23,7 @@ import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServ
 /**
  * GameControllerService implementation
  * 
- * @author dansun
+ * @author dansun och sigge
  *
  */
 @Stateless
@@ -41,106 +41,6 @@ public class GameofKrownsControllServiceBean implements GameofKrownsControllServ
             this.entityManager = entityManager;
     }
 
-	/**
-	 * Finds all games for specified authorized player.
-	 * @param playerId
-	 * @param password
-	 * @return Set<Game>
-	 * @throws PlayerNotFoundException
-	 * @throws WrongPasswordException
-	 */
-	@Override
-	public Set<Game> getActiveGamesForPlayer(Long playerId, String password) throws PlayerNotFoundException, WrongPasswordException {
-		//
-		// Find and validate player
-		//
-		Player player = findPlayerById(playerId);
-		validatePlayerPassword(player, password);
-		//
-		// Return games player is partisipating in
-		//
-		Set<Game> games = new HashSet<Game>();
-		games.addAll(player.getPlayingGames());		
-		return games;	
-	}
-
-	/**
-	 * Registers new player with playerName and password.
-	 * @param playerName
-	 * @param password
-	 * @return Player
-	 * @throws PlayerAllreadyExistsException
-	 */
-	@Override
-	public Player registerPlayer(String playerName, String password) throws PlayerAllreadyExistsException {
-		try {
-			//
-			// Find player, if found throw exception
-			//
-			findPlayerByName(playerName);
-			throw new PlayerAllreadyExistsException("Player with playername "+playerName+" is allready registered.");
-		} catch (PlayerNotFoundException e) {
-			//
-			// Create new player
-			//
-			Player newPlayer = new Player();
-			newPlayer.setPlayerName(playerName);
-			newPlayer.setPassword(password);
-			entityManager.persist(newPlayer);
-			return newPlayer;
-		}
-	}
-
-	/**
-	 * Creates a new game with gameName for the specified authorized player
-	 * @param playerId
-	 * @param password
-	 * @param gameName
-	 * @return Game
-	 * @throws GameAllreadyExistsException
-	 * @throws PlayerNotFoundException 
-	 * @throws WrongPasswordException 
-	 */
-	@Override
-	public Game createGame(Long playerId, String password, String gameName) throws GameAllreadyExistsException, PlayerNotFoundException, WrongPasswordException {
-		//
-		// Find and validate player.
-		//
-		Player player = findPlayerById(playerId);
-		validatePlayerPassword(player, password);
-		try {
-			//
-			// Find game, if found throw exception
-			//
-			findGameByName(gameName);
-			throw new GameAllreadyExistsException("Game with gamename "+gameName+" is allready created.");
-		} catch (GameNotFoundException e) {
-			//
-			// Create new game.
-			//
-			Game newGame = new Game();
-			newGame.setGameName(gameName);
-			newGame.setOwner(player);
-			newGame.getPlayers().add(player);
-			entityManager.persist(newGame);
-			entityManager.flush();
-			entityManager.refresh(newGame);
-			return newGame;
-		}
-	}
-
-	@Override
-	public void invitePlayers(Long playerId, String password, Long gameId, Set<Player> playersToInvite) {
-		// TODO Implement invitation of players.
-		
-	}
-
-	@Override
-	public void acceptGame(Long playerId, String password, Long gameId) {
-		// TODO Implement acceptance of game invite.
-		
-	}
-	
 	/**
 	 * Finds unique player with playerName
 	 * @param playerName
@@ -209,6 +109,163 @@ public class GameofKrownsControllServiceBean implements GameofKrownsControllServ
 			throw new PlayerNotFoundException("Player with playerId "+playerId+" is not registered.");
 		}
 		return player;
+	}
+	
+	
+	
+	/**
+	  * Returns an object with the result of the login
+	  * @param userId
+	  * @param password
+	  * @return LoginResult
+	  */
+	@Override
+	public LoginResult authenticate(String userId, String password) {
+		 // Verify userId and password against db
+		 return new LoginResult();
+	 }
+	 
+	/**
+	  * Returns an object with the result of the login
+	  * @param userId
+	  * @param email
+	  * @param password
+	  * @return LoginResult
+	  */
+	@Override
+	 public LoginResult registerUser(String userId, String email, String password) {
+		// Create user in database
+		return new LoginResult();
+	}
+	 
+	/**
+	  * Returns an object with the number of active games for the user
+	  * @param userId
+	  * @param password
+	  * @return LoginResult
+	  */
+	@Override
+	 public UserGeneralStatus getGeneralStatus(String userId, String password){
+		// Find out how many games that are active for the user and populate the return object
+		return new UserGeneralStatus();
+	}
+	 
+	/**
+	  * Returns a list with the active games for the user
+	  * @param userId
+	  * @param password
+	  * @return ArrayList<Game>
+	  */
+	@Override
+	public ArrayList<Game> getActiveGames(String userId, String password){
+		// Get the list of games that are active for the provided user
+		return new ArrayList<Game>();
+	}
+	 
+	/**
+	  * Returns a list of friends for the user
+	  * @param userId
+	  * @param password
+	  * @return ArrayList<Friend>
+	  */
+	@Override
+	public ArrayList<Friend> getFriends(String userId, String password){
+		// Get all the friends for the provided user
+		return new ArrayList<Friend>();
+	}
+	 
+	/**
+	  * Requests the ID for a game to be created. If allowRandoms is true, the server will try to fill out to four players
+	  * with random players looking for games
+	  * @param userId
+	  * @param password
+	  * @param allowRandoms
+	  * @param userids
+	  * @return long
+	  */
+	@Override
+	public long createGame(String userId, long password, boolean allowRandoms, ArrayList<String> userids) {
+		// Create a new game in the database
+		// Create invitations for the users in userids
+		// If random players are allowed, see if other pending games can be merged
+		return 0;
+	}
+	 
+	/**
+	  * Fetches the requested game
+	  * @param userId
+	  * @param password
+	  * @param gameId
+	  * @return Game
+	  */
+	@Override
+	public Game fetchGame(String userId, long password,long gameId) {
+		// Fetch the game object from the database
+		return new Game();
+	}
+	 
+	/**
+	  * Gets the invitations that the user is currently involved in
+	  * @param userId
+	  * @param password
+	  * @return ArrayList<Invitation>
+	  */
+	@Override
+	public ArrayList<Invitation> getInvitations(String userId, String password) {
+		//Gets the invitations for the provided user
+		return new ArrayList<Invitation>();
+	}
+	 
+	 /**
+	  * Gets the invitations that the user is currently involved in
+	  * @param userId
+	  * @param password
+	  * @param invitationId
+	  * @param accept
+	  * @return ArrayList<Invitation>
+	  */
+	 public long respondToInvitation(String userId, String password,long invitationId,boolean accept) {
+		 // Updates the invitation object
+		 // If the game is not full, see if this invitation can be merged with another (if randoms are wanted)
+		 // If the game is full, create a game object and notify the clients with push
+	 }
+
+	/**
+	  * Gets the history for the specified turn
+	  * @param userId
+	  * @param password
+	  * @param gameId
+	  * @param turnIndex
+	  * @return ArrayList<HistoryEvent>
+	  */
+	@Override
+	public ArrayList<HistoryEvent> getHistory(String userId, String password,long gameId,long turnIndex) {
+		// Get the history entries that is requested. (For all userids with the provided game and turn)
+		return new ArrayList<HistoryEvent>();
+	}
+	 
+	/**
+	  * Performs the action for the user. If action is not allowed, unchanged game obj is returned
+	  * @param userId
+	  * @param password
+	  * @param gameId
+	  * @param regionId
+	  * @param actionId
+	  * @return Game
+	  */
+	@Override
+	public Game performAction(String userId,String password,String gameId,String regionId,String actionId) {
+		if(actionId == 1) {
+			// Vanligt partiarbete
+		} else if (actionId == 2) {
+			// Dra en löpsedel
+		}
+		// Om spelaren redan gjort sitt drag för denna runda, be honom dra åt helvete
+		// Om inte alla gjort sitt drag, spara undan detta drag
+		// Om alla gjort sina drag skapa history entries och uppdatera game obj
+		// Bedöm om matchen är avgjord eller inte
+		// Returnera senaste status till spelaren
+		return new Game();
 	}
 	
 }

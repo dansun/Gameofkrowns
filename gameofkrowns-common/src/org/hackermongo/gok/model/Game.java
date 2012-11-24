@@ -1,6 +1,7 @@
 package org.hackermongo.gok.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Game {
@@ -15,8 +16,15 @@ public class Game {
 		Friend f = new Friend();
 		Clan c = new Clan("Lannister");
 		Character ch = new Character("Tyrion");
+		createdDate = Calendar.getInstance().getTime();
 		
 		players.add(new Player(f,c,ch));
+	}
+	
+	public Game(ArrayList<Player> players)
+	{
+		this.players = players; 
+		createdDate = Calendar.getInstance().getTime(); // TODO: No,no
 	}
 	
 	public long getId() {

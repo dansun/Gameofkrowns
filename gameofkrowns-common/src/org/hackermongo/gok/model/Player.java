@@ -7,10 +7,14 @@ public class Player {
 	private int finishedTurn; // starts as -1
 	
 	public Player(Friend f,Clan cl, Character ch) {
+		this(f, cl, ch, -1);
+	}
+	
+	public Player(Friend f,Clan cl, Character ch, int turnIndex) {
 		user = f;
 		clan = cl;
 		character = ch;
-		finishedTurn = -1;
+		finishedTurn = turnIndex;
 	}
 	
 	public Friend getUser() {

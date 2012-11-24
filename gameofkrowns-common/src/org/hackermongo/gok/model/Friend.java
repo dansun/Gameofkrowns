@@ -10,6 +10,11 @@ public class Friend {
 		
 	}
 	
+	public Friend(String userId)
+	{
+		this.userId = userId;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}

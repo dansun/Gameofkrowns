@@ -18,7 +18,7 @@ import org.hackermongo.gameofkrowns.application.exception.GameNotFoundException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerAllreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerNotFoundException;
 import org.hackermongo.gameofkrowns.application.exception.WrongPasswordException;
-import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllService;
+import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServiceV1;
 
 /**
  * GameControllerService implementation
@@ -28,7 +28,7 @@ import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServ
  */
 @Stateless(mappedName="gameofkrownsControllServiceBean-v0.0.2")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class GameofKrownsControllServiceBean implements GameofKrownsControllService {
+public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllServiceV1 {
 
 	@PersistenceContext(unitName = "gameofkrownsPersistenceUnit")
     private EntityManager entityManager;
@@ -130,7 +130,7 @@ public class GameofKrownsControllServiceBean implements GameofKrownsControllServ
 	}
 
 	@Override
-	public void invitePlayers(Long playerId, String password, Long gameId, Set<Player> playersToInvite) {
+	public void invitePlayers(Long playerId, String password, Long gameId, Set<Long> playersToInvite) {
 		// TODO Implement invitation of players.
 		
 	}

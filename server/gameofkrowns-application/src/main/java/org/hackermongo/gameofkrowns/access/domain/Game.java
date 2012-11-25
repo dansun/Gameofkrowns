@@ -3,6 +3,7 @@ package org.hackermongo.gameofkrowns.access.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +24,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.joda.time.DateTime;
 
 /**
@@ -74,6 +77,9 @@ public class Game implements Serializable {
 	@OneToMany(mappedBy="playingGames", cascade=CascadeType.ALL)
 	private Set<Player> players;
 
+	@Sort(type=SortType.NATURAL)
+	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
+	private SortedSet<Move> moves;
 	
 	public void setGameId(long gameId) {
 		this.gameId = gameId;
@@ -152,6 +158,14 @@ public class Game implements Serializable {
 
 	public void setPlayers(Set<Player> players) {
 		this.players = players;
+	}
+
+	public SortedSet<Move> getMoves() {
+		return moves;
+	}
+
+	public void setMoves(SortedSet<Move> moves) {
+		this.moves = moves;
 	}
 
 	public enum GameState {

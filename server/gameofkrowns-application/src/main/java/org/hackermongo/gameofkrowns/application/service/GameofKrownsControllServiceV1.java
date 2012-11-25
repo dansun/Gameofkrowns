@@ -15,7 +15,7 @@ import org.hackermongo.gameofkrowns.application.exception.WrongPasswordException
  * @author dansun
  *
  */
-public interface GameofKrownsControllService {
+public interface GameofKrownsControllServiceV1 {
 	
 	/**
 	 * Gets games for given player ID.
@@ -55,7 +55,7 @@ public interface GameofKrownsControllService {
 	 * @param gameId
 	 * @param playersToInvite
 	 */
-	public void invitePlayers(Long playerId, String password, Long gameId, Set<Player> playersToInvite);
+	public void invitePlayers(Long playerId, String password, Long gameId, Set<Long> playersToInvite);
 	
 	/**
 	 * Accept invitation to game.

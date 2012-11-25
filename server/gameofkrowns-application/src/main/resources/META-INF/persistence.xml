@@ -6,16 +6,19 @@
 		<jta-data-source>gameofkrownsDataSource</jta-data-source>
 		<class>org.hackermongo.gameofkrowns.access.domain.Game</class>
 	    <class>org.hackermongo.gameofkrowns.access.domain.Player</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.Move</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.moves.Bribe</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.moves.Propaganda</class>
 		<properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 			<property name="hibernate.max_fetch_depth" value="3" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.use_sql_comments" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.query.substitutions" value="true Y, false N" />
 			<property name="hibernate.cache.use_query_cache" value="false" />
 			<property name="hibernate.archive.autodetection" value="class" />
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.hbm2ddl.auto" value="create-update" />
 		</properties>
 	</persistence-unit>
 </persistence>

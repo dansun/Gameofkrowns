@@ -16,7 +16,7 @@
 	      <init-param>
 	            <param-name>resteasy.resources</param-name>
 	            <param-value>
-	                org.hackermongo.gameofkrowns.business.service.GameControllServiceJSON
+	                org.hackermongo.gameofkrowns.business.service.GameControllServiceJSONV1
 	            </param-value>
 	        </init-param>
 	     <load-on-startup>1</load-on-startup>

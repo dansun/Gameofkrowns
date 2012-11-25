@@ -1,5 +1,6 @@
 package org.hackermongo.gameofkrowns.application.service.impl;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,9 +14,10 @@ import javax.persistence.Query;
 
 import org.hackermongo.gameofkrowns.access.domain.Game;
 import org.hackermongo.gameofkrowns.access.domain.Player;
-import org.hackermongo.gameofkrowns.application.exception.GameAllreadyExistsException;
+import org.hackermongo.gameofkrowns.application.exception.GameAlreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.GameNotFoundException;
-import org.hackermongo.gameofkrowns.application.exception.PlayerAllreadyExistsException;
+import org.hackermongo.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
+import org.hackermongo.gameofkrowns.application.exception.PlayerAlreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerNotFoundException;
 import org.hackermongo.gameofkrowns.application.exception.WrongPasswordException;
 import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServiceV1;
@@ -28,19 +30,13 @@ import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServ
  */
 @Stateless(mappedName="gameofkrownsControllServiceBean-v0.0.2")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllServiceV1 {
+public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllServiceV1, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@PersistenceContext(unitName = "gameofkrownsPersistenceUnit")
     private EntityManager entityManager;
-    
-	/**
-	 * Set entitymanager reference, used for mocking the likes
-	 * @param entityManager
-	 */
-	public void setEntityManager(final EntityManager entityManager) {
-            this.entityManager = entityManager;
-    }
-
+	
 	/**
 	 * Finds all games for specified authorized player.
 	 * @param playerId
@@ -49,15 +45,19 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
 	 */
-	@Override
-	public Set<Game> getActiveGamesForPlayer(Long playerId, String password) throws PlayerNotFoundException, WrongPasswordException {
+	public Set<Game> getActiveGamesForPlayer(
+		Long playerId, 
+		String password) 
+	throws 
+		PlayerNotFoundException, 
+		WrongPasswordException {
 		//
 		// Find and validate player
 		//
 		Player player = findPlayerById(playerId);
 		validatePlayerPassword(player, password);
 		//
-		// Return games player is partisipating in
+		// Return games player is participating in
 		//
 		Set<Game> games = new HashSet<Game>();
 		games.addAll(player.getPlayingGames());		
@@ -69,16 +69,19 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @param playerName
 	 * @param password
 	 * @return Player
-	 * @throws PlayerAllreadyExistsException
+	 * @throws PlayerAlreadyExistsException
 	 */
-	@Override
-	public Player registerPlayer(String playerName, String password) throws PlayerAllreadyExistsException {
+	public Player registerPlayer(
+		String playerName, 
+		String password) 
+	throws 
+		PlayerAlreadyExistsException {
 		try {
 			//
 			// Find player, if found throw exception
 			//
 			findPlayerByName(playerName);
-			throw new PlayerAllreadyExistsException("Player with playername "+playerName+" is allready registered.");
+			throw new PlayerAlreadyExistsException("Player with playername "+playerName+" is already registered.");
 		} catch (PlayerNotFoundException e) {
 			//
 			// Create new player
@@ -97,12 +100,18 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @param password
 	 * @param gameName
 	 * @return Game
-	 * @throws GameAllreadyExistsException
+	 * @throws GameAlreadyExistsException
 	 * @throws PlayerNotFoundException 
 	 * @throws WrongPasswordException 
 	 */
-	@Override
-	public Game createGame(Long playerId, String password, String gameName) throws GameAllreadyExistsException, PlayerNotFoundException, WrongPasswordException {
+	public Game createGame(
+		Long playerId, 
+		String password, 
+		String gameName) 
+	throws 
+		GameAlreadyExistsException, 
+		PlayerNotFoundException, 
+		WrongPasswordException {
 		//
 		// Find and validate player.
 		//
@@ -113,7 +122,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			// Find game, if found throw exception
 			//
 			findGameByName(gameName);
-			throw new GameAllreadyExistsException("Game with gamename "+gameName+" is allready created.");
+			throw new GameAlreadyExistsException("Game with gamename "+gameName+" is already created.");
 		} catch (GameNotFoundException e) {
 			//
 			// Create new game.
@@ -122,6 +131,8 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			newGame.setGameName(gameName);
 			newGame.setOwner(player);
 			newGame.getPlayers().add(player);
+			player.getOwnedGames().add(newGame);
+			player.getPlayingGames().add(newGame);
 			entityManager.persist(newGame);
 			entityManager.flush();
 			entityManager.refresh(newGame);
@@ -129,16 +140,83 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		}
 	}
 
-	@Override
-	public void invitePlayers(Long playerId, String password, Long gameId, Set<Long> playersToInvite) {
-		// TODO Implement invitation of players.
+	/**
+	 * Invites players with specified playerId´s to specified game.
+	 * @param playerId
+	 * @param password
+	 * @param gameId
+	 * @param playerIdsToInvite
+	 */
+	public void invitePlayers(
+		Long playerId, 
+		String password, 
+		Long gameId, 
+		Set<Long> playerIdsToInvite) 
+	throws 
+		PlayerNotFoundException, 
+		WrongPasswordException, 
+		GameNotFoundException {
+		//
+		// Find and validate player.
+		//
+		Player player = findPlayerById(playerId);
+		validatePlayerPassword(player, password);
+		//
+		// Find game to invite players to
+		//
+		Game gameToInviteTo = null;
+		for(Game game : player.getOwnedGames()) {
+			if(game.getGameId().equals(gameId)) {
+				gameToInviteTo = game;
+			}
+		}
+		if(gameToInviteTo == null) {
+			throw new GameNotFoundException("Game with gameId "+gameId+" not found in players started games");
+		}
+		//
+		// Add players, if found, to game
+		//
+		for(Long playerIdToInvite : playerIdsToInvite) {
+			Player playerToInvite = entityManager.find(Player.class, playerIdToInvite);
+			if(playerToInvite == null) {
+				throw new PlayerNotFoundException("Invited player with playerId "+playerIdToInvite+" could not be found.");
+			}
+			gameToInviteTo.getInvitedPlayers().add(playerToInvite);
+		}
 		
 	}
 
-	@Override
-	public void acceptGame(Long playerId, String password, Long gameId) {
-		// TODO Implement acceptance of game invite.
-		
+	public void acceptGame(
+		Long playerId, 
+		String password, 
+		Long gameId) 
+	throws 
+		PlayerNotFoundException, 
+		WrongPasswordException, 
+		GameNotFoundException, 
+		PlayerNotInvitedToGameException {
+		//
+		// Find and validate player.
+		//
+		Player player = findPlayerById(playerId);
+		validatePlayerPassword(player, password);
+		//
+		// Find game to accept
+		//
+		Game gameToAccept = entityManager.find(Game.class, gameId);
+		if(gameToAccept == null) {
+			throw new GameNotFoundException("Game to accept with gameId '"+gameId+
+					"' could not be found.");
+		}
+		//
+		// Accept game
+		//
+		if(gameToAccept.getInvitedPlayers().contains(player)) {
+			gameToAccept.getPlayers().add(player);
+		} else {
+			throw new PlayerNotInvitedToGameException("Player with playerId '"+playerId+
+					"' has not been invited to game with gameId '"+gameId+"'.");
+		}
 	}
 	
 	/**
@@ -147,7 +225,10 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player
 	 * @throws PlayerNotFoundException
 	 */
-	private Player findPlayerByName(String playerName) throws PlayerNotFoundException {
+	private Player findPlayerByName(
+		String playerName) 
+	throws 
+		PlayerNotFoundException {
 		//
 		// Find player with playerName and return, else throw exception
 		//
@@ -166,7 +247,10 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Game
 	 * @throws GameNotFoundException
 	 */
-	private Game findGameByName(String gameName) throws GameNotFoundException {
+	private Game findGameByName(
+		String gameName) 
+	throws 
+		GameNotFoundException {
 		//
 		// Find game with gameName and return, else throw exception
 		//
@@ -175,7 +259,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		try {
 			return (Game) gameQuery.getSingleResult();	
 		} catch (NoResultException e) {
-			throw new GameNotFoundException("No game with gamename '"+gameName+"' could be found.");
+			throw new GameNotFoundException("No game with gameName '"+gameName+"' could be found.");
 		}
 	}
 	
@@ -185,7 +269,11 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @param password
 	 * @throws WrongPasswordException
 	 */
-	private void validatePlayerPassword(Player player, String password) throws WrongPasswordException {
+	private void validatePlayerPassword(
+		Player player, 
+		String password) 
+	throws 
+		WrongPasswordException {
 		//
 		// Compare give password with that of persisted players
 		//
@@ -200,7 +288,10 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player
 	 * @throws PlayerNotFoundException
 	 */
-	private Player findPlayerById(Long playerId) throws PlayerNotFoundException {
+	private Player findPlayerById(
+		Long playerId) 
+	throws 
+		PlayerNotFoundException {
 		//
 		// Find player by entity ID, else throw exception
 		//

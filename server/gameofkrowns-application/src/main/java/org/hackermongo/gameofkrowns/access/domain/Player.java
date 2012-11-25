@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  */
 @Entity
-@Table(name = "PLAYER")
+@Table(name = "PLAYERS")
 @NamedQueries({
         @NamedQuery(name = "player.findByPlayerName", query = "SELECT p FROM Player AS p WHERE p.playerName = :playerName")
 })

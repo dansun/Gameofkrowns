@@ -2,8 +2,10 @@ package org.hackermongo.gameofkrowns.access.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +26,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hackermongo.gameofkrowns.access.domain.game.County;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.joda.time.DateTime;
@@ -35,7 +38,7 @@ import org.joda.time.DateTime;
  *
  */
 @Entity
-@Table(name = "GAME")
+@Table(name = "GAMES")
 @NamedQueries({
     @NamedQuery(name = "game.findByGameName", query = "SELECT g FROM Game AS g WHERE g.gameName = :gameName")
 })
@@ -59,33 +62,28 @@ public class Game implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="REGISTRATION_TIME")
 	private Date registrationTime;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="STARTING_TIME")
-	private Date startingTime;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="FINISHING_TIME")
-	private Date finishingTime;
-	
+			
 	@ManyToOne
 	private Player owner;
 	
 	@OneToMany(mappedBy="invitedGames", cascade=CascadeType.ALL)
-	private Set<Player> invitedPlayers;
+	private Set<Player> invitedPlayers = new HashSet<Player>();
 	
 	@OneToMany(mappedBy="playingGames", cascade=CascadeType.ALL)
-	private Set<Player> players;
+	private Set<Player> players = new HashSet<Player>();
 
 	@Sort(type=SortType.NATURAL)
 	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
-	private SortedSet<Move> moves;
+	private SortedSet<Event> events = new TreeSet<Event>();
+	
+	@OneToMany(mappedBy="game")
+	private Set<County> counties = new HashSet<County>(); 
 	
 	public void setGameId(long gameId) {
 		this.gameId = gameId;
 	}
 
-	public long getGameId() {
+	public Long getGameId() {
 		return gameId;
 	}
 
@@ -97,14 +95,34 @@ public class Game implements Serializable {
 		return gameName;
 	}
 	
+	/**
+	 * Calculates the games current state
+	 * @return
+	 */
 	@XmlAttribute(name="gameState", required=true)
 	public GameState getGameState() {
-		if(this.startingTime!=null) {
-			if(this.finishingTime!=null) {
-				return GameState.RUNNING;	
-			} else {
-				return GameState.FINISHED;
+		//
+		// Find start and finish events
+		//
+		Event gameStartedEvent = null;
+		Event gameFinishedEvent = null;
+		for(Event event : events) {
+			switch(event.getEventType()) {
+			case GAME_START:
+				gameStartedEvent = event;
+				break;
+			case GAME_FINISH:
+				gameFinishedEvent = event;
+				break;
 			}
+		}
+		//
+		// Parse gamestate
+		//
+		if(gameStartedEvent!=null && gameFinishedEvent!=null) {
+			return GameState.FINISHED;
+		} else if (gameStartedEvent != null && gameFinishedEvent == null) {
+			return GameState.RUNNING;
 		} else {
 			return GameState.CREATED;
 		}
@@ -112,22 +130,6 @@ public class Game implements Serializable {
 
 	public DateTime getRegistrationTime() {
 		return registrationTime!=null?new DateTime(registrationTime):null;
-	}
-
-	public DateTime getFinishingTime() {
-		return finishingTime!=null?new DateTime(finishingTime):null;
-	}
-
-	public void setFinishingTime(DateTime finishingTime) {
-		this.finishingTime = finishingTime.toDate();
-	}
-
-	public DateTime getStartingTime() {
-		return startingTime!=null?new DateTime(startingTime):null;
-	}
-
-	public void setStartingTime(DateTime startingTime) {
-		this.startingTime = startingTime.toDate();
 	}
 
 	@PrePersist
@@ -160,12 +162,20 @@ public class Game implements Serializable {
 		this.players = players;
 	}
 
-	public SortedSet<Move> getMoves() {
-		return moves;
+	public SortedSet<Event> getEvents() {
+		return events;
 	}
 
-	public void setMoves(SortedSet<Move> moves) {
-		this.moves = moves;
+	public void setEvents(SortedSet<Event> events) {
+		this.events = events;
+	}
+
+	public Set<County> getCounties() {
+		return counties;
+	}
+
+	public void setCounties(Set<County> counties) {
+		this.counties = counties;
 	}
 
 	public enum GameState {

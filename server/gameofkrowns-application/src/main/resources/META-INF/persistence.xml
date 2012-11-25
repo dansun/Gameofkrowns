@@ -9,6 +9,32 @@
 	    <class>org.hackermongo.gameofkrowns.access.domain.Move</class>
 	    <class>org.hackermongo.gameofkrowns.access.domain.moves.Bribe</class>
 	    <class>org.hackermongo.gameofkrowns.access.domain.moves.Propaganda</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.Event</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.events.GameEnded</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.events.GameStarted</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.County</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.Influence</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Blekinge</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Dalarna</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Gavleborg</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Gotland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Halland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Jamtland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Jonkoping</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Kalmar</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Kronoberg</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Norrbotten</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Orebro</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Ostergotland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Skane</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Sodermanland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Stockholm</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Uppsala</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Varmland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Vasterbotten</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Vasternorrland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.Vastmanland</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VastraGotaland</class>
 		<properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 			<property name="hibernate.max_fetch_depth" value="3" />

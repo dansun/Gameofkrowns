@@ -18,14 +18,17 @@
             <groupId>org.hackermongo.gameofkrowns</groupId>
             <artifactId>gameofkrowns-application</artifactId>
             <type>ejb</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.ejb</groupId>
-            <artifactId>ejb-api</artifactId>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-ejb_3.1_spec</artifactId>
+			<scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
+        	<scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -34,6 +37,7 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
+            <scope>provided</scope>
         </dependency>
         
         <!-- Logging deps -->

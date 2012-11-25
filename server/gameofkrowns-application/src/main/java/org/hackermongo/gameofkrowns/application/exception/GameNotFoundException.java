@@ -8,7 +8,7 @@ import javax.xml.ws.WebFault;
  * @author dansun
  *
  */
-@WebFault(name = "PlayerNotFound", targetNamespace = "urn:nu.danielsundberg.goodstuff:exception")
+@WebFault(name = "PlayerNotFound", targetNamespace = "urn:org.hackermongo.gameofkrowns:exception")
 public class GameNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;

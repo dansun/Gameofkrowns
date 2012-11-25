@@ -22,13 +22,18 @@
         </dependency>
         <dependency>
             <groupId>org.hackermongo.gameofkrowns</groupId>
-            <artifactId>gameofkrowns-jsonapi</artifactId>
-            <type>war</type>
+            <artifactId>gameofkrowns-jsonejb</artifactId>
+            <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>org.hackermongo.gameofkrowns</groupId>
             <artifactId>gameofkrowns-application</artifactId>
             <type>ejb</type>
+        </dependency>
+    	<dependency>
+            <groupId>org.hackermongo.gameofkrowns</groupId>
+            <artifactId>gameofkrowns-jsonwar</artifactId>
+            <type>war</type>
         </dependency>
     </dependencies>
 
@@ -54,11 +59,15 @@
                         </ejbModule>
                         <ejbModule>
                             <groupId>org.hackermongo.gameofkrowns</groupId>
+                            <artifactId>gameofkrowns-jsonejb</artifactId>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>org.hackermongo.gameofkrowns</groupId>
                             <artifactId>gameofkrowns-application</artifactId>
                         </ejbModule>
                         <webModule>
 			                <groupId>org.hackermongo.gameofkrowns</groupId>
-                            <artifactId>gameofkrowns-jsonapi</artifactId>
+                            <artifactId>gameofkrowns-jsonwar</artifactId>
 			                <contextRoot>/gameofkrowns-jsonapi-${project.version}</contextRoot>
 			            </webModule>
                     </modules>

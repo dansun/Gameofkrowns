@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.hackermongo.gameofkrowns</groupId>
         <artifactId>gameofkrowns-reactor</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     
     <artifactId>gameofkrowns-ear</artifactId>
@@ -17,7 +17,17 @@
     <dependencies>
         <dependency>
             <groupId>org.hackermongo.gameofkrowns</groupId>
-            <artifactId>gameofkrowns-ejb</artifactId>
+            <artifactId>gameofkrowns-wsapi</artifactId>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hackermongo.gameofkrowns</groupId>
+            <artifactId>gameofkrowns-jsonapi</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hackermongo.gameofkrowns</groupId>
+            <artifactId>gameofkrowns-application</artifactId>
             <type>ejb</type>
         </dependency>
     </dependencies>
@@ -31,8 +41,17 @@
                     <modules>
                         <ejbModule>
                             <groupId>org.hackermongo.gameofkrowns</groupId>
-                            <artifactId>gameofkrowns-ejb</artifactId>
+                            <artifactId>gameofkrowns-wsapi</artifactId>
                         </ejbModule>
+                        <ejbModule>
+                            <groupId>org.hackermongo.gameofkrowns</groupId>
+                            <artifactId>gameofkrowns-application</artifactId>
+                        </ejbModule>
+                        <webModule>
+			                <groupId>org.hackermongo.gameofkrowns</groupId>
+                            <artifactId>gameofkrowns-jsonapi</artifactId>
+			                <contextRoot>/gameofkrowns-jsonapi-${project.version}</contextRoot>
+			            </webModule>
                     </modules>
                 </configuration>
             </plugin>

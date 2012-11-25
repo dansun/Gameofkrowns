@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.joda.time.DateTime;
 
@@ -36,6 +37,7 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "game.findByGameName", query = "SELECT g FROM Game AS g WHERE g.gameName = :gameName")
 })
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement(name="game")
 public class Game implements Serializable {
 
 	private static final long serialVersionUID = 1L;

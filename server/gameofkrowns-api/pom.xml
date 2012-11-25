@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+        <groupId>org.hackermongo.gameofkrowns</groupId>
+        <artifactId>gameofkrowns-reactor</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
+    </parent>
+    
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>gameofkrowns-api</artifactId>
+	<name>Game of Krowns :: API</name>
+	<packaging>pom</packaging>
+	
+	<modules>
+		<module>gameofkrowns-jsonapi</module>
+		<module>gameofkrowns-wsapi</module>
+	</modules>
+
+</project>

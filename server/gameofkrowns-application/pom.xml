@@ -6,10 +6,10 @@
     <parent>
         <groupId>org.hackermongo.gameofkrowns</groupId>
         <artifactId>gameofkrowns-reactor</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gameofkrowns-ejb</artifactId>
+    <artifactId>gameofkrowns-application</artifactId>
     <name>Game of Krowns :: Application</name>
     <packaging>ejb</packaging>
 
@@ -118,8 +118,8 @@
 				<clientExclude>**/impl/**</clientExclude>
 			</clientExcludes> 
                 </configuration>
-            </plugin>
-            
+            </plugin>          
         </plugins>
     </build>
+    
 </project>

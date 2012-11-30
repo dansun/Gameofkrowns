@@ -131,9 +131,10 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			newGame.setGameName(gameName);
 			newGame.setOwner(player);
 			newGame.getPlayers().add(player);
+			entityManager.persist(newGame);
 			player.getOwnedGames().add(newGame);
 			player.getPlayingGames().add(newGame);
-			entityManager.persist(newGame);
+			entityManager.merge(player);
 			entityManager.flush();
 			entityManager.refresh(newGame);
 			return newGame;

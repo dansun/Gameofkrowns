@@ -23,7 +23,7 @@ import org.joda.time.DateTime;
 @NamedQueries({
 	@NamedQuery(
 			name="findAllTimedOutEvents",
-			query="SELECT gameturn.game FROM GameTurn gameturn WHERE gameturn.timeout < SYSDATE")
+			query="SELECT gameturn.game FROM GameTurn gameturn WHERE gameturn.timeout < :currentdate")
 })
 @Table(name = "GAME_TURN_EVENT")
 @Inheritance(strategy=InheritanceType.JOINED)

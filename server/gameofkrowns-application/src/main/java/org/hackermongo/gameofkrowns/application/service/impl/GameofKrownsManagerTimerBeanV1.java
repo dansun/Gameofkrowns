@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import org.hackermongo.gameofkrowns.access.domain.Game;
 import org.hackermongo.gameofkrowns.application.service.GameofKrownsManagerTimerV1;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ public class GameofKrownsManagerTimerBeanV1 implements GameofKrownsManagerTimerV
 	public void handleTimeouts() {
 		log.info("Checking for timed out games....");
 		Query timeoutQuery = entityManager.createNamedQuery("findAllTimedOutEvents");
+		timeoutQuery.setParameter("currentdate", new DateTime().toDate());
 		@SuppressWarnings("unchecked")
 		List<Game> timedOutGames = (List<Game>) timeoutQuery.getResultList();
 		for(Game timedOutGame : timedOutGames) {

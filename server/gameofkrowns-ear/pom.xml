@@ -8,6 +8,7 @@
         <groupId>org.hackermongo.gameofkrowns</groupId>
         <artifactId>gameofkrowns-master</artifactId>
         <version>0.0.2-SNAPSHOT</version>
+        <relativePath/> 
     </parent>
     
     <artifactId>gameofkrowns-ear</artifactId>

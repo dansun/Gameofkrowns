@@ -4,7 +4,7 @@
 
 	<parent>
         <groupId>org.hackermongo.gameofkrowns</groupId>
-        <artifactId>gameofkrowns-reactor</artifactId>
+        <artifactId>gameofkrowns-master</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
     

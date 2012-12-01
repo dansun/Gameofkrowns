@@ -18,6 +18,7 @@
 		<dependency>
 	      <groupId>org.hackermongo.gameofkrowns</groupId>
 	      <artifactId>gameofkrowns-common</artifactId>
+	      <type>jar</type>
 	    </dependency>
 		<dependency>
 	      <groupId>javax.enterprise</groupId>
@@ -85,11 +86,6 @@
 		</dependency>
         
 		<!-- Test -->
-		<dependency>
-	      <groupId>org.hackermongo.gameofkrowns</groupId>
-	      <artifactId>gameofkrowns-common</artifactId>
-	      <scope>test</scope>
-	    </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

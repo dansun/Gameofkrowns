@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="gameofkrownsPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+		<class>org.hackermongo.gameofkrowns.access.domain.GameEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.PlayerEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.MoveEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.moves.BribeEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.moves.PropagandaEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.EventEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.events.GameEndedEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.events.GameStartedEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.CountyEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.InfluenceEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.BlekingeEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.DalarnaEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.GavleborgEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.GotlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.HallandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.JamtlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.JonkopingEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.KalmarEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.KronobergEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.NorrbottenEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.OrebroEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.OstergotlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.SkaneEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.SodermanlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.StockholmEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.UppsalaEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VarmlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VasterbottenEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VasternorrlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VastmanlandEntity</class>
+	    <class>org.hackermongo.gameofkrowns.access.domain.game.counties.VastraGotalandEntity</class>
+	</persistence-unit>
+</persistence>

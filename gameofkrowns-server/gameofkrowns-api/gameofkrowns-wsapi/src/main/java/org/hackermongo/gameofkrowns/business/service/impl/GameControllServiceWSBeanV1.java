@@ -155,6 +155,7 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 	}
 
 	@Override
+	@WebMethod(exclude = true)
 	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(Long playerId,
 			String password) throws PlayerNotFoundException,
 			WrongPasswordException {

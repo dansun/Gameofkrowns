@@ -15,7 +15,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-	<module>gameofkrowns-androidclient</module>
+		<!-- module>gameofkrowns-androidclient</module -->
 	</modules>
 	
 </project>

@@ -40,6 +40,11 @@ public interface GameofKrownsControllServiceWSV1 extends GameofKrownsControllSer
 			WrongPasswordException, GameNotFoundException;
 	
 	@Override
+	public Game<?,?,?> getGame(Long playerId, String password, Long gameId)
+			throws PlayerNotFoundException, WrongPasswordException,
+			GameNotFoundException, PlayerNotInvitedToGameException;
+	
+	@Override
 	public PlayerEntity registerPlayer(String playerName, String password)
 			throws PlayerAlreadyExistsException;
 }

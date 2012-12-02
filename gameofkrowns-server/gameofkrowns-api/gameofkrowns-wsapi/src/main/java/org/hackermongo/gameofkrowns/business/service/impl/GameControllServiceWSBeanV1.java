@@ -1,5 +1,6 @@
 package org.hackermongo.gameofkrowns.business.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -17,6 +18,7 @@ import org.hackermongo.gameofkrowns.access.domain.GameEntity;
 import org.hackermongo.gameofkrowns.access.domain.PlayerEntity;
 import org.hackermongo.gameofkrowns.application.exception.GameAlreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.GameNotFoundException;
+import org.hackermongo.gameofkrowns.application.exception.IllegalMoveException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerAlreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerNotFoundException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
@@ -161,5 +163,92 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 			WrongPasswordException {
 		throw new PlayerNotFoundException("Method incompatible with WS Implementation, use getActiveGamesForPlayerWS.");
 	}
+
+	
+	@WebMethod(operationName="reportBribeMove")
+	public void reportBribeMove(
+		@WebParam(name="PlayerId", 
+			partName = "PlayerId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") Long playerId, 
+		@WebParam(name="PlayerPassword", 
+			partName = "PlayerPassword", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String password, 
+		@WebParam(name="GameId", 
+			partName = "GameId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Long gameId,
+		@WebParam(name="CountyName", 
+			partName = "CaountyName", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:county") String countyName, 
+		@WebParam(name="Amount", 
+			partName = "Amount", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:move") BigDecimal amount)
+	throws 
+			PlayerNotFoundException, 
+			WrongPasswordException,
+			GameNotFoundException, 
+			PlayerNotInvitedToGameException,
+			IllegalMoveException {
+		serviceBean.reportBribeMove(playerId, password, gameId, countyName, amount);
+	}
+
+	@WebMethod(operationName="reportPropagandaMove")
+	public void reportPropagandaMove(
+		@WebParam(name="PlayerId", 
+			partName = "PlayerId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") Long playerId, 
+		@WebParam(name="PlayerPassword", 
+			partName = "PlayerPassword", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String password, 
+		@WebParam(name="GameId", 
+			partName = "GameId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Long gameId,
+		@WebParam(name="CountyName", 
+			partName = "CaountyName", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:county") String countyName, 
+		@WebParam(name="Amount", 
+			partName = "Amount", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:move") BigDecimal amount)
+	throws 
+			PlayerNotFoundException, 
+			WrongPasswordException,
+			GameNotFoundException, 
+			PlayerNotInvitedToGameException,
+			IllegalMoveException {
+		serviceBean.reportBribeMove(playerId, password, gameId, countyName, amount);
+	}
+
+	@WebMethod(operationName="getGame")
+	public GameEntity getGame(
+		@WebParam(name="PlayerId", 
+			partName = "PlayerId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") Long playerId, 
+		@WebParam(name="PlayerPassword", 
+			partName = "PlayerPassword", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String password, 
+		@WebParam(name="GameId", 
+			partName = "GameId", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Long gameId)
+	throws 
+			PlayerNotFoundException, 
+			WrongPasswordException,
+			GameNotFoundException, 
+			PlayerNotInvitedToGameException {
+		return (GameEntity) serviceBean.getGame(playerId, password, gameId);
+	}
+
+	@WebMethod(operationName="getPlayer")
+	public PlayerEntity getPlayer(
+		@WebParam(name="PlayerName", 
+			partName = "PlayerName", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String playerName, 
+		@WebParam(name="PlayerPassword", 
+			partName = "PlayerPassword", 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String password)
+	throws 
+			PlayerNotFoundException, 
+			WrongPasswordException {
+		return (PlayerEntity) serviceBean.getPlayer(playerName, password);
+	}
+
 	
 }

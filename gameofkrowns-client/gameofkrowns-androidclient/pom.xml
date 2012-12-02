@@ -20,6 +20,11 @@
 	</properties>
 
 	<dependencies>
+	    <dependency>
+			<groupId>org.hackermongo.gameofkrowns</groupId>
+			<artifactId>gameofkrowns-common</artifactId>
+			<type>jar</type>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -76,7 +77,7 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
 	private SortedSet<EventEntity> events = new TreeSet<EventEntity>();
 	
-	@OneToMany(mappedBy="game")
+	@ManyToMany(mappedBy="game")
 	private Set<CountyEntity> counties = new HashSet<CountyEntity>(); 
 	
 	public void setGameId(long gameId) {

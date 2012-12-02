@@ -1,4 +1,4 @@
-package org.hackermongo.gameofkrowns.business.service;
+package org.hackermongo.gameofkrowns.business.service.impl;
 
 import java.util.Set;
 
@@ -13,7 +13,8 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
 import org.hackermongo.gameofkrowns.access.domain.Game;
-import org.hackermongo.gameofkrowns.access.domain.Player;
+import org.hackermongo.gameofkrowns.access.domain.GameEntity;
+import org.hackermongo.gameofkrowns.access.domain.PlayerEntity;
 import org.hackermongo.gameofkrowns.application.exception.GameAlreadyExistsException;
 import org.hackermongo.gameofkrowns.application.exception.GameNotFoundException;
 import org.hackermongo.gameofkrowns.application.exception.PlayerAlreadyExistsException;
@@ -21,6 +22,7 @@ import org.hackermongo.gameofkrowns.application.exception.PlayerNotFoundExceptio
 import org.hackermongo.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
 import org.hackermongo.gameofkrowns.application.exception.WrongPasswordException;
 import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServiceV1;
+import org.hackermongo.gameofkrowns.business.service.GameofKrownsControllServiceWSV1;
 
 /**
  * GameControllerService Webservice wrapper
@@ -33,7 +35,7 @@ import org.hackermongo.gameofkrowns.application.service.GameofKrownsControllServ
 	targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice")
 @SOAPBinding(style = javax.jws.soap.SOAPBinding.Style.DOCUMENT)
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
+public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceWSV1 {
 	
 	@EJB(mappedName="gameofkrownsControllServiceBean-v0.0.2")
 	private GameofKrownsControllServiceV1 serviceBean;
@@ -41,11 +43,12 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 	/**
 	 * Define getGamesForPlayer operation.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@WebMethod(operationName="getGamesForPlayer")
 	public @WebResult(name="Game", 
 						partName="Game", 
-						targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Set<Game<?,?,?>> 
-			getActiveGamesForPlayer(
+						targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Set<GameEntity> 
+			getActiveGamesForPlayerWS(
 		@WebParam(name="PlayerId", 
 			partName = "PlayerId", 
 			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") Long playerId, 
@@ -55,7 +58,7 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 	throws 
 		PlayerNotFoundException, 
 		WrongPasswordException {
-		return serviceBean.getActiveGamesForPlayer(playerId, password);
+		return (Set)serviceBean.getActiveGamesForPlayer(playerId, password);
 	}
 	
 	/**
@@ -64,7 +67,7 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 	@WebMethod(operationName="registerPlayer")
 	public @WebResult(name="Player", 
 			partName="Player", 
-			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") Player<?>
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") PlayerEntity
 			registerPlayer(
 		@WebParam(name="PlayerName", 
 			partName = "PlayerName", 
@@ -74,7 +77,7 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:player") String password) 
 	throws 
 		PlayerAlreadyExistsException {
-		return serviceBean.registerPlayer(playerName, password);
+		return (PlayerEntity) serviceBean.registerPlayer(playerName, password);
 	}
 	
 	/**
@@ -83,7 +86,7 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 	@WebMethod(operationName="createGame")
 	public @WebResult(name="Game", 
 			partName="Game", 
-			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") Game<?,?,?> 
+			targetNamespace="urn:org.hackermongo.gameofkrowns:gamecontrollservice:game") GameEntity
 			createGame(
 		@WebParam(name="PlayerId", 
 			partName = "PlayerId", 
@@ -98,7 +101,7 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 		GameAlreadyExistsException, 
 		PlayerNotFoundException, 
 		WrongPasswordException {
-		return serviceBean.createGame(playerId, password, gameName);
+		return (GameEntity) serviceBean.createGame(playerId, password, gameName);
 	}
 	
 	/**
@@ -149,6 +152,13 @@ public class GameControllServiceWSV1 implements GameofKrownsControllServiceV1 {
 	throws 
 		PlayerNotFoundException, WrongPasswordException, GameNotFoundException {
 		serviceBean.invitePlayers(playerId, password, gameId, playerIdsToInvite);
+	}
+
+	@Override
+	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(Long playerId,
+			String password) throws PlayerNotFoundException,
+			WrongPasswordException {
+		throw new PlayerNotFoundException("Method incompatible with WS Implementation, use getActiveGamesForPlayerWS.");
 	}
 	
 }

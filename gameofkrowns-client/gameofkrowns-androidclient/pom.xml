@@ -81,6 +81,9 @@
 					<manifest>
 						<debuggable>true</debuggable>
 					</manifest>
+					<sdk>
+                        <path>${env.ANDROID_SDK}</path>
+                    </sdk>
 				</configuration>
 				<executions>
 					<execution>

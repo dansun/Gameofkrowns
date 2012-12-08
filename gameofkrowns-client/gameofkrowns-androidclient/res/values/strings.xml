@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Game of Krowns</string>
+    <string name="title_gameofkrowns_detail">Game of krowns Detail</string>
+    <string name="title_gameofkrowns_list">Games of krowns</string>
+    <string name="entergame_gameofkrowns_detail">Enter game</string>
+	<string name="title_gameofkrowns_game">Games of krowns</string>
+	
+</resources>

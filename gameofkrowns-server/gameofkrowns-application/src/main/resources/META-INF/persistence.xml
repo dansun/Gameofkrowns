@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="gameofkrownsPersistenceUnit" transaction-type="JTA">
+      	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>gameofkrownsDataSource</jta-data-source>
+		<class>nu.danielsundberg.gameofkrowns.access.domain.GameEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.MoveEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.moves.BribeEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.moves.PropagandaEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.EventEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameEndedEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameStartedEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.BlekingeEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.DalarnaEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.GavleborgEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.GotlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.HallandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.JamtlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.JonkopingEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.KalmarEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.KronobergEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.NorrbottenEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.OrebroEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.OstergotlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.SkaneEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.SodermanlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.StockholmEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.UppsalaEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.VarmlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.VasterbottenEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.VasternorrlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.VastmanlandEntity</class>
+	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.VastraGotalandEntity</class>
+		<properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+			<property name="hibernate.max_fetch_depth" value="3" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.query.substitutions" value="true Y, false N" />
+			<property name="hibernate.cache.use_query_cache" value="false" />
+			<property name="hibernate.archive.autodetection" value="class" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
+		</properties>
+	</persistence-unit>
+</persistence>

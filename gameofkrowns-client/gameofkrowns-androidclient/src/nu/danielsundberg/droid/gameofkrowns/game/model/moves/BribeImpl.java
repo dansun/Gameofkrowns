@@ -3,9 +3,8 @@ package nu.danielsundberg.droid.gameofkrowns.game.model.moves;
 import nu.danielsundberg.droid.gameofkrowns.game.model.GameImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.MoveImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.PlayerImpl;
-
-import nu.danielsundberg.gameofkrowns.access.domain.Event;
-import nu.danielsundberg.gameofkrowns.access.domain.moves.Bribe;
+import nu.danielsundberg.gameofkrowns.domain.Event;
+import nu.danielsundberg.gameofkrowns.domain.moves.Bribe;
 
 public class BribeImpl extends MoveImpl implements Bribe<PlayerImpl, GameImpl>{
 

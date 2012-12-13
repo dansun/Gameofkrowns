@@ -2,10 +2,9 @@ package nu.danielsundberg.droid.gameofkrowns.game.model.events;
 
 import nu.danielsundberg.droid.gameofkrowns.game.model.EventImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.GameImpl;
-
-import nu.danielsundberg.gameofkrowns.access.domain.Event;
-import nu.danielsundberg.gameofkrowns.access.domain.EventType;
-import nu.danielsundberg.gameofkrowns.access.domain.events.GameStarted;
+import nu.danielsundberg.gameofkrowns.domain.Event;
+import nu.danielsundberg.gameofkrowns.domain.EventType;
+import nu.danielsundberg.gameofkrowns.domain.events.GameStarted;
 
 /**
  * Event representing a start of a game

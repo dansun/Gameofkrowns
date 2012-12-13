@@ -2,9 +2,9 @@ package nu.danielsundberg.droid.gameofkrowns.game.model;
 
 import java.io.Serializable;
 
-import nu.danielsundberg.gameofkrowns.access.domain.EventType;
-import nu.danielsundberg.gameofkrowns.access.domain.Move;
-import nu.danielsundberg.gameofkrowns.access.domain.MoveType;
+import nu.danielsundberg.gameofkrowns.domain.EventType;
+import nu.danielsundberg.gameofkrowns.domain.Move;
+import nu.danielsundberg.gameofkrowns.domain.MoveType;
 
 /**
  * A game of krowns move

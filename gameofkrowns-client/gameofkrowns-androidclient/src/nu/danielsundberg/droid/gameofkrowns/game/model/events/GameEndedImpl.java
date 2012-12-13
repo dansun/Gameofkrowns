@@ -3,10 +3,9 @@ package nu.danielsundberg.droid.gameofkrowns.game.model.events;
 import nu.danielsundberg.droid.gameofkrowns.game.model.EventImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.GameImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.PlayerImpl;
-
-import nu.danielsundberg.gameofkrowns.access.domain.Event;
-import nu.danielsundberg.gameofkrowns.access.domain.EventType;
-import nu.danielsundberg.gameofkrowns.access.domain.events.GameEnded;
+import nu.danielsundberg.gameofkrowns.domain.Event;
+import nu.danielsundberg.gameofkrowns.domain.EventType;
+import nu.danielsundberg.gameofkrowns.domain.events.GameEnded;
 
 /**
  * Event representing end of a game

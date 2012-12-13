@@ -3,8 +3,7 @@ package nu.danielsundberg.droid.gameofkrowns.game.model.game;
 import java.math.BigDecimal;
 
 import nu.danielsundberg.droid.gameofkrowns.game.model.PlayerImpl;
-
-import nu.danielsundberg.gameofkrowns.access.domain.game.Influence;
+import nu.danielsundberg.gameofkrowns.domain.game.Influence;
 
 public class InfluenceImpl implements Influence<PlayerImpl, CountyImpl>{
 	

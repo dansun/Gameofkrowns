@@ -3,7 +3,7 @@ package nu.danielsundberg.droid.gameofkrowns.game.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import nu.danielsundberg.gameofkrowns.access.domain.Player;
+import nu.danielsundberg.gameofkrowns.domain.Player;
 
 /**
  * Player

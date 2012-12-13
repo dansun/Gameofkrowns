@@ -8,9 +8,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import nu.danielsundberg.droid.gameofkrowns.game.model.game.CountyImpl;
+import nu.danielsundberg.gameofkrowns.domain.Game;
+import nu.danielsundberg.gameofkrowns.domain.GameState;
 
-import nu.danielsundberg.gameofkrowns.access.domain.Game;
-import nu.danielsundberg.gameofkrowns.access.domain.GameState;
 import org.joda.time.DateTime;
 
 /**

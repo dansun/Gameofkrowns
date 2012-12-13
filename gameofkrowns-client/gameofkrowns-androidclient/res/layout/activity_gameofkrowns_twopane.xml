@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/gameofkrowns_list"
-        android:name="nu.danielsundberg.gameofkrowns.android.list.activity.GameofkrownsListFragment"
+        android:name="nu.danielsundberg.droid.gameofkrowns.list.activity.GameofkrownsListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

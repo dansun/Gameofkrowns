@@ -4,10 +4,10 @@ import java.util.Date;
 
 import nu.danielsundberg.droid.gameofkrowns.game.model.EventImpl;
 import nu.danielsundberg.droid.gameofkrowns.game.model.GameImpl;
+import nu.danielsundberg.gameofkrowns.domain.Event;
+import nu.danielsundberg.gameofkrowns.domain.EventType;
+import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
 
-import nu.danielsundberg.gameofkrowns.access.domain.Event;
-import nu.danielsundberg.gameofkrowns.access.domain.EventType;
-import nu.danielsundberg.gameofkrowns.access.domain.events.GameTurn;
 import org.joda.time.DateTime;
 
 /**

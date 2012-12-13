@@ -1,7 +1,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/gameofkrowns_list"
-    android:name="nu.danielsundberg.gameofkrowns.android.list.activity.GameofkrownsListFragment"
+    android:name="nu.danielsundberg.droid.gameofkrowns.list.activity.GameofkrownsListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"

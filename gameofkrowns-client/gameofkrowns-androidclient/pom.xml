@@ -61,6 +61,8 @@
 	
 	<build>
 		<finalName>${project.artifactId}</finalName>
+		 <sourceDirectory>src/</sourceDirectory>
+		 <testSourceDirectory>testsrc/</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -2,8 +2,9 @@ package nu.danielsundberg.droid.gameofkrowns.game.model;
 
 import java.util.Date;
 
-import nu.danielsundberg.gameofkrowns.access.domain.Event;
-import nu.danielsundberg.gameofkrowns.access.domain.EventType;
+import nu.danielsundberg.gameofkrowns.domain.Event;
+import nu.danielsundberg.gameofkrowns.domain.EventType;
+
 import org.joda.time.DateTime;
 
 public abstract class EventImpl implements Event<GameImpl> {

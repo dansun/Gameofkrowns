@@ -1,8 +1,5 @@
 package nu.danielsundberg.gameofkrowns.domain;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 
@@ -13,8 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @param <GAME>
  *
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name="move")
 public abstract interface Move<PLAYER, GAME> extends Event<GAME> {
 	
 	public PLAYER getPlayer();

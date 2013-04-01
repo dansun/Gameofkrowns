@@ -1,31 +1,31 @@
 package nu.danielsundberg.gameofkrowns.business.service;
 
-import java.math.BigDecimal;
-import java.util.Set;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
-import nu.danielsundberg.gameofkrowns.application.exception.GameAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.GameNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.IllegalMoveException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
-import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
+import nu.danielsundberg.gameofkrowns.application.exception.*;
 import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.Player;
-
 import org.jboss.resteasy.annotations.providers.jaxb.json.BadgerFish;
+
+import javax.ws.rs.*;
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Path("gamecontrollservice")
 public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllServiceV1 {
 
-	@GET
+    @GET
+    @Path("get/player/with/playername/{playerName}/and/password/{password}")
+    @Produces("application/json")
+    @BadgerFish
+    @Override
+    Player<?> getPlayer(
+            @PathParam("playerName") String playerName,
+            @PathParam("password") String password)
+    throws
+            PlayerNotFoundException,
+            WrongPasswordException;
+
+    @GET
 	@Path("get/active/games/for/player/{playerId}/with/password/{password}")
 	@Produces("application/json")
 	@BadgerFish
@@ -108,7 +108,7 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			PlayerNotInvitedToGameException;
 	
 	@PUT
-	@Path("report/bribe/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
+	@Path("report/bribe/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
 	@Produces("application/json")
 	@BadgerFish
 	@Override
@@ -126,7 +126,7 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			IllegalMoveException;
 	
 	@PUT
-	@Path("report/bribe/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
+	@Path("report/propaganda/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
 	@Produces("application/json")
 	@BadgerFish
 	@Override

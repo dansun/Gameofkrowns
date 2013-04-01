@@ -1,17 +1,11 @@
 package nu.danielsundberg.gameofkrowns.application.service;
 
-import java.math.BigDecimal;
-import java.util.Set;
-
-import nu.danielsundberg.gameofkrowns.application.exception.GameAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.GameNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.IllegalMoveException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
-import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
+import nu.danielsundberg.gameofkrowns.application.exception.*;
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.Player;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * GameControllService interface V1
@@ -54,7 +48,8 @@ public interface GameofKrownsControllServiceV1 {
 	 * @param playerName
 	 * @param password
 	 * @return Player
-	 * @throws PlayerAlreadyExistsException
+	 * @throws PlayerNotFoundException
+     * @throws WrongPasswordException
 	 */
 	public Player<?> getPlayer(
 			String playerName, 

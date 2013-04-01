@@ -1,11 +1,10 @@
 package nu.danielsundberg.droid.gameofkrowns.login.activity;
 
-import nu.danielsundberg.droid.gameofkrowns.R;
-import nu.danielsundberg.droid.gameofkrowns.list.activity.GameofkrownsListActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,6 +16,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import nu.danielsundberg.droid.gameofkrowns.CommonUtils;
+import nu.danielsundberg.droid.gameofkrowns.R;
+import nu.danielsundberg.droid.gameofkrowns.list.activity.GameofkrownsListActivity;
+import com.google.android.gcm.GCMRegistrar;
+import com.google.android.gcm.GCMBaseIntentService;
+
+
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -154,6 +160,15 @@ public class LoginActivity extends Activity {
 		}
 	}
 
+
+    private void registerDevice() {
+        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkManifest(this);
+    }
+
+    
+    
+
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -245,4 +260,34 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+
+    
+
+    public class GCMIntentService extends GCMBaseIntentService{
+
+        private static final String TAG = "===GCMIntentService===";
+
+        public GCMIntentService() {
+            super(CommonUtils.CLIENT_ID);
+        }
+
+        @Override
+        protected void onMessage(Context arg0, Intent arg1) {}
+
+        @Override
+        protected void onRegistered(Context arg0, String registrationId) {}
+
+        @Override
+        protected void onUnregistered(Context arg0, String arg1) {}
+
+        @Override
+        protected void onError(Context arg0, String errorId) {}
+
+        @Override
+        protected boolean onRecoverableError(Context context, String errorId) {
+            return super.onRecoverableError(context, errorId);
+        }
+
+    }
+    
 }

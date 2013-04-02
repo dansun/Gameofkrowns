@@ -1,29 +1,23 @@
 package nu.danielsundberg.gameofkrowns.application.service.impl;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.GamePlayerEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.OwnedGameEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
+import nu.danielsundberg.gameofkrowns.application.exception.*;
+import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
+import nu.danielsundberg.gameofkrowns.domain.Game;
+import nu.danielsundberg.gameofkrowns.domain.Player;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
-import nu.danielsundberg.gameofkrowns.application.exception.GameAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.GameNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.IllegalMoveException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
-import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
-import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
-import nu.danielsundberg.gameofkrowns.domain.Game;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * GameControllerService implementation
@@ -32,7 +26,7 @@ import nu.danielsundberg.gameofkrowns.domain.Game;
  *
  */
 @Stateless(mappedName="gameofkrownsControllServiceBean-v0.0.2")
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllServiceV1, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -57,7 +51,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		//
 		// Find and validate player
 		//
-		PlayerEntity player = findPlayerById(playerId);
+		PlayerEntity player = (PlayerEntity) findPlayerById(playerId);
 		validatePlayerPassword(player, password);
 		//
 		// Return games player is participating in
@@ -74,7 +68,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player
 	 * @throws PlayerAlreadyExistsException
 	 */
-	public PlayerEntity registerPlayer(
+	public Player<?> registerPlayer(
 		String playerName, 
 		String password) 
 	throws 
@@ -107,7 +101,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException 
 	 * @throws WrongPasswordException 
 	 */
-	public GameEntity createGame(
+	public Game<?,?,?> createGame(
 			Long playerId, 
 			String password, 
 			String gameName) 
@@ -118,7 +112,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		//
 		// Find and validate player.
 		//
-		PlayerEntity player = findPlayerById(playerId);
+		PlayerEntity player = (PlayerEntity) findPlayerById(playerId);
 		validatePlayerPassword(player, password);
 		try {
 			//
@@ -132,12 +126,37 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			//
 			GameEntity newGame = new GameEntity();
 			newGame.setGameName(gameName);
-			newGame.setOwner(player);
-			newGame.getPlayers().add(player);
-			entityManager.persist(newGame);
-			player.getOwnedGames().add(newGame);
-			player.getPlayingGames().add(newGame);
-			entityManager.merge(player);
+            entityManager.persist(newGame);
+
+            //
+            // Add ownership for registering player
+            //
+            OwnedGameEntity ownedGameEntity = new OwnedGameEntity();
+            ownedGameEntity.setPlayer(player);
+            ownedGameEntity.setGame(newGame);
+            player.addOwnedGame(ownedGameEntity);
+            newGame.setOwner(ownedGameEntity);
+            entityManager.persist(ownedGameEntity);
+
+            //
+            // Add registering player as player to game
+            //
+            GamePlayerEntity gamePlayer = new GamePlayerEntity();
+            gamePlayer.setGame(newGame);
+            gamePlayer.setPlayer(player);
+            player.addGamePlayer(gamePlayer);
+            newGame.addGamePlayer(gamePlayer);
+            entityManager.persist(gamePlayer);
+
+            //
+            // Merge entities
+            //
+            entityManager.merge(player);
+            entityManager.merge(newGame);
+
+            //
+            // Flush and refresh game for return.
+            //
 			entityManager.flush();
 			entityManager.refresh(newGame);
 			return newGame;
@@ -163,7 +182,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		//
 		// Find and validate player.
 		//
-		PlayerEntity player = findPlayerById(playerId);
+		PlayerEntity player = (PlayerEntity) findPlayerById(playerId);
 		validatePlayerPassword(player, password);
 		//
 		// Find game to invite players to
@@ -202,7 +221,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		//
 		// Find and validate player.
 		//
-		PlayerEntity player = findPlayerById(playerId);
+		PlayerEntity player = (PlayerEntity) findPlayerById(playerId);
 		validatePlayerPassword(player, password);
 		//
 		// Find game to accept
@@ -229,7 +248,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player
 	 * @throws PlayerNotFoundException
 	 */
-	private PlayerEntity findPlayerByName(
+	private Player<?> findPlayerByName(
 			String playerName) 
 	throws 
 			PlayerNotFoundException {
@@ -251,7 +270,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Game
 	 * @throws GameNotFoundException
 	 */
-	private GameEntity findGameByName(
+	private Game<?,?,?> findGameByName(
 			String gameName) 
 	throws 
 			GameNotFoundException {
@@ -292,7 +311,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player
 	 * @throws PlayerNotFoundException
 	 */
-	private PlayerEntity findPlayerById(
+	private Player<?> findPlayerById(
 			Long playerId) 
 	throws 
 			PlayerNotFoundException {
@@ -316,8 +335,22 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			WrongPasswordException,
 			GameNotFoundException, 
 			PlayerNotInvitedToGameException {
-		// TODO Auto-generated method stub
-		return null;
+
+        PlayerEntity player = entityManager.find(PlayerEntity.class, playerId);
+        validatePlayerPassword(player, password);
+
+        GameEntity game = entityManager.find(GameEntity.class, gameId);
+        if(game==null) {
+            throw new GameNotFoundException("Game with gameId "+gameId+" is not registered.");
+        }
+
+        if(game.getOwner().equals(player) ||
+                !game.getPlayers().contains(player)) {
+            throw new PlayerNotInvitedToGameException("Player with playerId " +
+                    playerId + " is not invited to, or owning, game with gameId " + gameId + " .");
+        }
+
+		return game;
 	}
 
 	@Override
@@ -348,7 +381,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException  
 	 */
-	public PlayerEntity getPlayer(
+	public Player<?> getPlayer(
 			String playerName, 
 			String password)
 	throws 

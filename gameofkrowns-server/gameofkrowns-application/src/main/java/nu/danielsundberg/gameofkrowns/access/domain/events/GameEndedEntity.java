@@ -1,15 +1,16 @@
 package nu.danielsundberg.gameofkrowns.access.domain.events;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameEnded;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Event representing end of a game
@@ -20,7 +21,8 @@ public class GameEndedEntity extends EventEntity implements GameEnded<PlayerEnti
 
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne
+	@ManyToOne
+    @JoinColumn(name = "GAME_FINISHED_PLAYER_ID", referencedColumnName = "PLAYERID")
 	private PlayerEntity winningPlayer;
 
 	public GameEndedEntity() {

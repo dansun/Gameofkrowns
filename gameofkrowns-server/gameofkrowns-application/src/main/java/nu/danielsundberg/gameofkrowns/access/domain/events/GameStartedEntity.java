@@ -1,14 +1,14 @@
 package nu.danielsundberg.gameofkrowns.access.domain.events;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameStarted;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Event representing a start of a game
@@ -31,5 +31,5 @@ public class GameStartedEntity extends EventEntity implements GameStarted<GameEn
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 }

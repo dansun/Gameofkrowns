@@ -2,18 +2,7 @@ package nu.danielsundberg.gameofkrowns.access.domain;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
@@ -33,7 +22,8 @@ public abstract class EventEntity implements Event<GameEntity> {
 	@Column(name="EVENTID")
     private Long eventId;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="GAME_ID", referencedColumnName = "GAMEID")
 	private GameEntity game;
 	
 	@Column(name="REGISTRATIONTIME", nullable=false)

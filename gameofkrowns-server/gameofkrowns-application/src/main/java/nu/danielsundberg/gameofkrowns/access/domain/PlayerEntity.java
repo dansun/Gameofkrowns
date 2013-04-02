@@ -1,35 +1,25 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
-import java.io.Serializable;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-
 import nu.danielsundberg.gameofkrowns.domain.Player;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Player
- * @author dansun
- *
  */
 @Entity
 @Table(name = "PLAYERS")
 @NamedQueries({
-        @NamedQuery(name = "player.findByPlayerName", query = "SELECT p FROM PlayerEntity AS p WHERE p.playerName = :playerName")
+        @NamedQuery(
+                name = "player.findByPlayerName",
+                query = "SELECT player " +
+                        "FROM PlayerEntity AS player " +
+                        "WHERE player.playerName = :playerName")
 })
-@XmlAccessorType(XmlAccessType.NONE)
 public class PlayerEntity implements Player<GameEntity>, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,24 +28,25 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 	@GeneratedValue(generator = "PLAYER_SEQUENCE")
     @SequenceGenerator(name = "PLAYER_SEQUENCE", sequenceName = "PLAYER_SEQUENCE")
 	@Column(name="PLAYERID")
-	@XmlAttribute(name="playerId", required=true)
 	private long playerId;
 	
 	@Column(name="PLAYERNAME", unique=true)
-	@XmlAttribute(name="playerName", required=true)
 	private String playerName;
 	
 	@Column(name="PASSWORD")
-	private String password;
+    private String password;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<GameEntity> invitedGames;
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "INVITAION_PLAYER_ID", referencedColumnName = "PLAYERID")
+    private Set<GameInvitationEntity> invitedGames = new LinkedHashSet<GameInvitationEntity>();
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<GameEntity> ownedGames;
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "OWNING_PLAYER_ID", referencedColumnName = "PLAYERID")
+    private Set<OwnedGameEntity> ownedGames = new LinkedHashSet<OwnedGameEntity>();
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<GameEntity> playingGames;
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name ="PLAYING_PLAYER_ID", referencedColumnName = "PLAYERID")
+	private Set<GamePlayerEntity> playingGames = new LinkedHashSet<GamePlayerEntity>();
 	
 	public void setPlayerId(long playerId) {
 		this.playerId = playerId;
@@ -72,7 +63,8 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 	public String getPlayerName() {
 		return playerName;
 	}
-	
+
+    @JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -81,28 +73,39 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 		this.password = password;
 	}
 
+    @JsonIgnore
 	public Set<GameEntity> getInvitedGames() {
-		return this.invitedGames;
+		Set<GameEntity> gamesInvitedTo = new LinkedHashSet<GameEntity>();
+        for(GameInvitationEntity invitationEntity : this.invitedGames) {
+            gamesInvitedTo.add(invitationEntity.getGame());
+        }
+        return gamesInvitedTo;
 	}
 
-	public void setInvitedGames(Set<GameEntity> invitedGames) {
-		this.invitedGames = invitedGames;
-	}
+    public void addOwnedGame(OwnedGameEntity ownedGameEntity) {
+        this.ownedGames.add(ownedGameEntity);
+    }
 
+    @JsonIgnore
 	public Set<GameEntity> getOwnedGames() {
+        Set<GameEntity> ownedGames = new LinkedHashSet<GameEntity>();
+        for(OwnedGameEntity ownedGameEntity : this.ownedGames) {
+            ownedGames.add(ownedGameEntity.getGame());
+        }
 		return ownedGames;
 	}
 
-	public void setOwnedGames(Set<GameEntity> ownedGames) {
-		this.ownedGames = ownedGames;
-	}
+    public void addGamePlayer(GamePlayerEntity playingGame) {
+        this.playingGames.add(playingGame);
+    }
 
+    @JsonIgnore
 	public Set<GameEntity> getPlayingGames() {
-		return playingGames;
+        Set<GameEntity> playerGames = new LinkedHashSet<GameEntity>();
+        for(GamePlayerEntity gamePlayerEntity : playingGames) {
+            playerGames.add(gamePlayerEntity.getGame());
+        }
+		return playerGames;
 	}
 
-	public void setPlayingGames(Set<GameEntity> playingGames) {
-		this.playingGames = playingGames;
-	}
-	
 }

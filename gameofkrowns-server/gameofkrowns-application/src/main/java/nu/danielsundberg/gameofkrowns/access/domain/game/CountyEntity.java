@@ -1,24 +1,12 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.County;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "COUNTIES")
@@ -37,10 +25,11 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
 	@Column(name="COUNTYNAME")
 	protected CountyName countyname;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "county")
 	private Set<InfluenceEntity> influences = new HashSet<InfluenceEntity>();
 	
 	@ManyToOne
+    @JoinColumn(name = "COUNTY_GAME_ID", referencedColumnName = "GAMEID")
 	private GameEntity game;
 
 	public Long getCountyid() {

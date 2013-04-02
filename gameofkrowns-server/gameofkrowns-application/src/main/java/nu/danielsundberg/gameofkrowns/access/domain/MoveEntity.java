@@ -1,21 +1,12 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
+import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.Move;
 import nu.danielsundberg.gameofkrowns.domain.MoveType;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * A game of krowns move
@@ -26,7 +17,11 @@ import nu.danielsundberg.gameofkrowns.domain.MoveType;
 @Entity
 @Table(name = "MOVES")
 @NamedQueries({
-    @NamedQuery(name = "move.findByGame", query = "SELECT move FROM MoveEntity move WHERE move.game = :game")
+    @NamedQuery(
+            name = "move.findByGame",
+            query = "SELECT move " +
+                    "FROM MoveEntity move " +
+                    "WHERE move.game = :game")
 })
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class MoveEntity extends EventEntity implements Move<PlayerEntity, GameEntity>, Serializable{
@@ -34,6 +29,7 @@ public abstract class MoveEntity extends EventEntity implements Move<PlayerEntit
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
+    @JoinColumn(name = "PLAYER_ID", referencedColumnName = "PLAYERID")
 	private PlayerEntity player;
 	
 	@Column(name="MOVETYPE", nullable=false)
@@ -54,6 +50,14 @@ public abstract class MoveEntity extends EventEntity implements Move<PlayerEntit
 	
 	public final EventType getEventType() {
 		return EventType.GAME_MOVE;
-	}	
+	}
 
+    @Override
+    public int compareTo(Event<GameEntity> o) {
+        if(this.getEventId().equals(o.getEventId())) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
 }

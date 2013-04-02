@@ -9,9 +9,6 @@ import java.util.Set;
 
 /**
  * GameControllService interface V1
- * 
- * @author dansun
- *
  */
 public interface GameofKrownsControllServiceV1 {
 	

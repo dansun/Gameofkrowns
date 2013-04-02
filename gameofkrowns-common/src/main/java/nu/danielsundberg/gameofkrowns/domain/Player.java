@@ -1,22 +1,27 @@
 package nu.danielsundberg.gameofkrowns.domain;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Set;
 
-
 /**
  * Player
- * @author dansun
- *
  */
+@XmlRootElement(name = "player")
+@XmlAccessorType(XmlAccessType.NONE)
 public interface Player<GAME> extends Serializable {
 
 	public void setPlayerId(long playerId);
 
+    @XmlElement
 	public long getPlayerId();
 
 	public void setPlayerName(String playerName);
-	
+
+    @XmlElement
 	public String getPlayerName();
 	
 	public String getPassword();
@@ -25,14 +30,8 @@ public interface Player<GAME> extends Serializable {
 
 	public Set<GAME> getInvitedGames();
 
-	public void setInvitedGames(Set<GAME> invitedGames);
-
 	public Set<GAME> getOwnedGames();
-
-	public void setOwnedGames(Set<GAME> ownedGames);
 
 	public Set<GAME> getPlayingGames();
 
-	public void setPlayingGames(Set<GAME> playingGames);
-	
 }

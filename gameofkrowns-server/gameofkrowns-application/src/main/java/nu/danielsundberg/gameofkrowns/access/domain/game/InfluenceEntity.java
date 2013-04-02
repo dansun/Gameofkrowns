@@ -2,15 +2,7 @@ package nu.danielsundberg.gameofkrowns.access.domain.game;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.Influence;
@@ -28,10 +20,12 @@ public class InfluenceEntity implements Influence<PlayerEntity, CountyEntity>{
 	@Column(name="INFLUENCEID")
     private Long influenceid;
 	
-	@OneToOne(mappedBy="game")
+	@ManyToOne
+    @JoinColumn(name = "INFLUENCE_COUNTY_ID", referencedColumnName = "COUNTYID")
 	private CountyEntity county;
 		
-	@Column(name="INFLUENCING_PLAYER_ID")
+	@ManyToOne
+    @JoinColumn(name = "INFLUENCE_PLAYER_ID", referencedColumnName = "PLAYERID")
 	private PlayerEntity player;
 		
 	@Column(name="AMOUNT")

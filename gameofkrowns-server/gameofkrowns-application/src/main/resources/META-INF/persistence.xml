@@ -5,6 +5,11 @@
       	<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>gameofkrownsDataSource</jta-data-source>
 		<class>nu.danielsundberg.gameofkrowns.access.domain.GameEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.GameInvitationEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.OwnedGameEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.GameCountyEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.GameEventEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.GamePlayerEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.MoveEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.moves.BribeEntity</class>

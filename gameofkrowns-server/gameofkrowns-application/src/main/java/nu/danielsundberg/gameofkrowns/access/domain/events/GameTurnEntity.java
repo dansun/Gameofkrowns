@@ -1,20 +1,14 @@
 package nu.danielsundberg.gameofkrowns.access.domain.events;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
-
 import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Event representing one turn complete of a game, IE all players have registered a move.
@@ -25,7 +19,9 @@ import org.joda.time.DateTime;
 @NamedQueries({
 	@NamedQuery(
 			name="findAllTimedOutEvents",
-			query="SELECT gameturn.game FROM GameTurnEntity gameturn WHERE gameturn.timeout < :currentdate")
+			query="SELECT gameturn.game " +
+                  "FROM GameTurnEntity gameturn " +
+                  "WHERE gameturn.timeout < :currentdate")
 })
 @Table(name = "GAME_TURN_EVENT")
 public class GameTurnEntity extends EventEntity implements GameTurn<GameEntity> {

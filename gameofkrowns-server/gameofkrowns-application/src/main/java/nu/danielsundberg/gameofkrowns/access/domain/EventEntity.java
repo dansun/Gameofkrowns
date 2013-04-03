@@ -1,16 +1,16 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
-import java.util.Date;
-
-import javax.persistence.*;
-
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
-
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "EVENTS")
+@DiscriminatorColumn(name = "EVENTTYPE", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class EventEntity implements Event<GameEntity> {
 
@@ -38,11 +38,11 @@ public abstract class EventEntity implements Event<GameEntity> {
 	private void onCreate() {
 		this.registrationTime = new DateTime().toDate();
 	}
-	
-	/**
+
+    /**
 	 * Compare using registrationtime.
 	 */
-	public int compareTo(EventEntity o) {
+	public int compareTo(Event<GameEntity> o) {
 		if(o.getRegistrationTime()!=null && this.getRegistrationTime() !=null) {
 			if(o.getRegistrationTime().isEqual(this.getRegistrationTime())) {
 				if(o.getEventId()!=null && this.getEventId() !=null) {
@@ -81,6 +81,8 @@ public abstract class EventEntity implements Event<GameEntity> {
 			}
 		}
 	}
+
+
 	
 	public DateTime getRegistrationTime() {
 		return registrationTime!=null?new DateTime(registrationTime):null;
@@ -90,6 +92,7 @@ public abstract class EventEntity implements Event<GameEntity> {
 		this.registrationTime = registrationTime.toDate();
 	}
 
+    @JsonIgnore
 	public GameEntity getGame() {
 		return game;
 	}

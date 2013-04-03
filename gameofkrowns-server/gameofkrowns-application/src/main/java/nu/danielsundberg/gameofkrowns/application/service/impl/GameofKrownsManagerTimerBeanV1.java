@@ -1,19 +1,17 @@
 package nu.danielsundberg.gameofkrowns.application.service.impl;
 
-import java.util.List;
+import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
+import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsManagerTimerV1;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
-import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsManagerTimerV1;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class GameofKrownsManagerTimerBeanV1 implements GameofKrownsManagerTimerV1 {
@@ -29,10 +27,9 @@ public class GameofKrownsManagerTimerBeanV1 implements GameofKrownsManagerTimerV
 	@Schedule(hour="*/1", persistent=false)
 	public void handleTimeouts() {
 		log.info("Checking for timed out games....");
-		Query timeoutQuery = entityManager.createNamedQuery("findAllTimedOutEvents");
+		TypedQuery<GameEntity> timeoutQuery = entityManager.createNamedQuery("findAllTimedOutEvents", GameEntity.class);
 		timeoutQuery.setParameter("currentdate", new DateTime().toDate());
-		@SuppressWarnings("unchecked")
-		List<GameEntity> timedOutGames = (List<GameEntity>) timeoutQuery.getResultList();
+		List<GameEntity> timedOutGames = timeoutQuery.getResultList();
 		for(GameEntity timedOutGame : timedOutGames) {
 			log.warn("Game with gameId "+timedOutGame.getGameId()+" has timed out.");
 		}

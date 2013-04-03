@@ -37,7 +37,7 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
     private String password;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "INVITAION_PLAYER_ID", referencedColumnName = "PLAYERID")
+    @JoinColumn(name = "INVITATION_PLAYER_ID", referencedColumnName = "PLAYERID")
     private Set<GameInvitationEntity> invitedGames = new LinkedHashSet<GameInvitationEntity>();
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
@@ -72,6 +72,10 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+    public void addInvitationToGame(GameInvitationEntity gameInvitationEntity) {
+        this.invitedGames.add(gameInvitationEntity);
+    }
 
     @JsonIgnore
 	public Set<GameEntity> getInvitedGames() {

@@ -1,11 +1,7 @@
 package nu.danielsundberg.gameofkrowns.application.exception;
 
-
 /**
- * WrongPassword exception and webfault configuration.
- * 
- * @author dansun
- *
+ * Wrong password exception.
  */
 public class WrongPasswordException extends Exception {
 

@@ -1,8 +1,10 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game;
 
+import nu.danielsundberg.gameofkrowns.access.domain.GameCountyEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.County;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,12 +27,11 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
 	@Column(name="COUNTYNAME")
 	protected CountyName countyname;
 	
-	@OneToMany(mappedBy = "county")
+	@OneToMany(mappedBy = "county", fetch = FetchType.EAGER)
 	private Set<InfluenceEntity> influences = new HashSet<InfluenceEntity>();
-	
-	@ManyToOne
-    @JoinColumn(name = "COUNTY_GAME_ID", referencedColumnName = "GAMEID")
-	private GameEntity game;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
+	private GameCountyEntity gameCounty;
 
 	public Long getCountyid() {
 		return countyid;
@@ -48,12 +49,13 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
 		this.influences = influences;
 	}
 
-	public GameEntity getGame() {
-		return game;
-	}
+    public void setGameCounty(GameCountyEntity gameCountyEntity) {
+        this.gameCounty = gameCountyEntity;
+    }
 
-	public void setGame(GameEntity game) {
-		this.game = game;
+    @JsonIgnore
+	public GameEntity getGame() {
+		return gameCounty.getGame();
 	}
 
 }

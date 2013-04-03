@@ -62,22 +62,22 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			PlayerNotFoundException,
 			WrongPasswordException;
 
-	@PUT
-	@Path("invite/players/{playerIdsToInvite}/to/game/{gameId}/for/player/{playerId}/with/password/{password}")
+	@GET
+	@Path("invite/player/{playerIdToInvite}/to/game/{gameId}/for/player/{playerId}/with/password/{password}")
 	@Produces("application/json")
 	@BadgerFish
 	@Override
-	public void invitePlayers(
+	public void invitePlayer(
 			@PathParam("playerId") Long playerId, 
 			@PathParam("password") String password, 
 			@PathParam("gameId") Long gameId,
-			@PathParam("playersToInvite") Set<Long> playersToInvite)
+			@PathParam("playerIdToInvite") Long playerToInvite)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException, 
 			GameNotFoundException;
 
-	@PUT
+	@GET
 	@Path("accept/invitation/to/game/{gameId}/for/player/{playerId}/with/password/{password}")
 	@Produces("application/json")
 	@BadgerFish
@@ -86,11 +86,11 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			@PathParam("playerId") Long playerId, 
 			@PathParam("password") String password, 
 			@PathParam("gameId") Long gameId)
-	throws 
-			PlayerNotFoundException, 
-			WrongPasswordException, 
-			GameNotFoundException, 
-			PlayerNotInvitedToGameException;
+            throws
+            PlayerNotFoundException,
+            WrongPasswordException,
+            GameNotFoundException,
+            PlayerNotInvitedToGameException, IllegalGameStateException;
 	
 	@GET
 	@Path("get/game/{gameId}/for/player/{playerId}/with/password/{password}")
@@ -107,7 +107,7 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			GameNotFoundException, 
 			PlayerNotInvitedToGameException;
 	
-	@PUT
+	@GET
 	@Path("report/bribe/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
 	@Produces("application/json")
 	@BadgerFish
@@ -125,7 +125,7 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			PlayerNotInvitedToGameException,
 			IllegalMoveException;
 	
-	@PUT
+	@GET
 	@Path("report/propaganda/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
 	@Produces("application/json")
 	@BadgerFish

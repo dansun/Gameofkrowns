@@ -2,7 +2,6 @@ package nu.danielsundberg.gameofkrowns.access.domain.events;
 
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
-import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
 import org.joda.time.DateTime;
@@ -23,6 +22,7 @@ import java.util.Date;
                   "FROM GameTurnEntity gameturn " +
                   "WHERE gameturn.timeout < :currentdate")
 })
+@DiscriminatorValue(value = "GAME_TURN")
 @Table(name = "GAME_TURN_EVENT")
 public class GameTurnEntity extends EventEntity implements GameTurn<GameEntity> {
 
@@ -38,12 +38,6 @@ public class GameTurnEntity extends EventEntity implements GameTurn<GameEntity> 
 	
 	public Date getTimeout() {
 		return timeout;
-	}
-
-	@Override
-	public int compareTo(Event<GameEntity> o) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

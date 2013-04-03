@@ -1,24 +1,19 @@
 package nu.danielsundberg.gameofkrowns.business.service;
 
-import java.util.Set;
-
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
-import nu.danielsundberg.gameofkrowns.application.exception.GameAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.GameNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
-import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
+import nu.danielsundberg.gameofkrowns.application.exception.*;
 import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
 import nu.danielsundberg.gameofkrowns.domain.Game;
+
+import java.util.Set;
 
 public interface GameofKrownsControllServiceWSV1 extends GameofKrownsControllServiceV1 {
 
 	@Override
 	public void acceptGame(Long playerId, String password, Long gameId)
-			throws PlayerNotFoundException, WrongPasswordException,
-			GameNotFoundException, PlayerNotInvitedToGameException;
+            throws PlayerNotFoundException, WrongPasswordException,
+            GameNotFoundException, PlayerNotInvitedToGameException, IllegalGameStateException;
 	
 	@Override
 	public GameEntity createGame(Long playerId, String password,
@@ -35,8 +30,8 @@ public interface GameofKrownsControllServiceWSV1 extends GameofKrownsControllSer
 			WrongPasswordException;
 	
 	@Override
-	public void invitePlayers(Long playerId, String password, Long gameId,
-			Set<Long> playersToInvite) throws PlayerNotFoundException,
+	public void invitePlayer(Long playerId, String password, Long gameId,
+			Long playerToInvite) throws PlayerNotFoundException,
 			WrongPasswordException, GameNotFoundException;
 	
 	@Override

@@ -79,16 +79,16 @@ public interface GameofKrownsControllServiceV1 {
 	 * @param playerId
 	 * @param password
 	 * @param gameId
-	 * @param playersToInvite
+	 * @param playerToInvite
 	 * @throws PlayerNotFoundException 
 	 * @throws WrongPasswordException 
 	 * @throws GameNotFoundException 
 	 */
-	public void invitePlayers(
+	public void invitePlayer(
 			Long playerId, 
 			String password, 
 			Long gameId, 
-			Set<Long> playersToInvite) 
+			Long playerToInvite)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException, 
@@ -107,12 +107,12 @@ public interface GameofKrownsControllServiceV1 {
 	public void acceptGame(
 			Long playerId, 
 			String password, 
-			Long gameId) 
-	throws 
-			PlayerNotFoundException, 
-			WrongPasswordException, 
-			GameNotFoundException, 
-			PlayerNotInvitedToGameException;
+			Long gameId)
+            throws
+            PlayerNotFoundException,
+            WrongPasswordException,
+            GameNotFoundException,
+            PlayerNotInvitedToGameException, IllegalGameStateException;
 	
 	/**
 	 * Get game.

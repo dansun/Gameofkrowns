@@ -30,4 +30,12 @@ public class GameInvitationEntity {
         return invitedPlayer;
     }
 
+    public void setPlayer(PlayerEntity invitedPlayer) {
+        this.invitedPlayer = invitedPlayer;
+    }
+
+    public void setGame(GameEntity game) {
+        this.game = game;
+    }
+
 }

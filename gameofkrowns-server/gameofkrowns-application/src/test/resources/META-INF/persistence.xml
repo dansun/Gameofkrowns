@@ -14,6 +14,7 @@
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.moves.PropagandaEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.EventEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameEndedEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameTurnEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameStartedEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity</class>

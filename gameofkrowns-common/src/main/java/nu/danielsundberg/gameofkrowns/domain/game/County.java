@@ -17,6 +17,4 @@ public abstract interface County<GAME, INFLUENCE> extends Serializable {
 
 	public GAME getGame();
 
-	public void setGame(GAME game);
-	
 }

@@ -3,19 +3,16 @@ package nu.danielsundberg.gameofkrowns.access.domain.events;
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
-import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameEnded;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Event representing end of a game
  */
 @Entity
+@DiscriminatorValue(value = "GAME_FINISH")
 @Table(name = "GAME_FINISHED_EVENT")
 public class GameEndedEntity extends EventEntity implements GameEnded<PlayerEntity, GameEntity> {
 
@@ -35,12 +32,6 @@ public class GameEndedEntity extends EventEntity implements GameEnded<PlayerEnti
 
 	public void setWinningPlayer(PlayerEntity winningPlayer) {
 		this.winningPlayer = winningPlayer;
-	}
-
-	@Override
-	public int compareTo(Event<GameEntity> o) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

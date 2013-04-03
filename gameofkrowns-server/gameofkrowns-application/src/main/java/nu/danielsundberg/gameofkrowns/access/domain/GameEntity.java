@@ -1,8 +1,10 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
+import nu.danielsundberg.gameofkrowns.access.domain.events.GameTurnEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.GameState;
+import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.joda.time.DateTime;
@@ -149,6 +151,10 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 		return gamePlayers;
 	}
 
+    public void addEvent(GameEventEntity gameEventEntity) {
+        this.events.add(gameEventEntity);
+    }
+
 	public SortedSet<EventEntity> getEvents() {
         SortedSet<EventEntity> gameEvents = new TreeSet<EventEntity>();
         for(GameEventEntity gameEventEntity : events) {
@@ -157,6 +163,10 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 		return gameEvents;
 	}
 
+    public void addGameCounty(GameCountyEntity gameCountyEntity) {
+        this.counties.add(gameCountyEntity);
+    }
+
 	public Set<CountyEntity> getCounties() {
         Set<CountyEntity> gameCounties = new LinkedHashSet<CountyEntity>();
         for(GameCountyEntity gameCountyEntity : counties) {
@@ -164,5 +174,18 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
         }
 		return gameCounties;
 	}
+
+    public GameTurn getCurrentGameTurn() {
+        GameTurnEntity gameTurnEntity = null;
+        for(EventEntity event : getEvents()) {
+            if(event instanceof GameTurnEntity) {
+                if(gameTurnEntity == null ||
+                        gameTurnEntity.getRegistrationTime().isBefore(event.getRegistrationTime())) {
+                    gameTurnEntity = (GameTurnEntity) event;
+                }
+            }
+        }
+        return gameTurnEntity;
+    }
 
 }

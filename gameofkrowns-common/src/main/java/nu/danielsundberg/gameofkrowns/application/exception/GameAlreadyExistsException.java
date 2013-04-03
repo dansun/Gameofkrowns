@@ -1,11 +1,7 @@
 package nu.danielsundberg.gameofkrowns.application.exception;
 
-
 /**
- * GameAllreadyExists exception and webfault configuration.
- * 
- * @author dansun
- *
+ * Game already exists exception
  */
 public class GameAlreadyExistsException extends Exception {
 

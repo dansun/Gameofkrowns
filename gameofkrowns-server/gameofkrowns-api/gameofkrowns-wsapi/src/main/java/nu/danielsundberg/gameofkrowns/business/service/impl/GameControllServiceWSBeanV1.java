@@ -1,7 +1,11 @@
 package nu.danielsundberg.gameofkrowns.business.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Set;
+import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
+import nu.danielsundberg.gameofkrowns.application.exception.*;
+import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
+import nu.danielsundberg.gameofkrowns.business.service.GameofKrownsControllServiceWSV1;
+import nu.danielsundberg.gameofkrowns.domain.Game;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -12,25 +16,11 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
-import nu.danielsundberg.gameofkrowns.business.service.GameofKrownsControllServiceWSV1;
-import nu.danielsundberg.gameofkrowns.domain.Game;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
-import nu.danielsundberg.gameofkrowns.application.exception.GameAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.GameNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.IllegalMoveException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerAlreadyExistsException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
-import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotInvitedToGameException;
-import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
-import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
- * GameControllerService Webservice wrapper
- * 
- * @author dansun
+ * GameControllerService Webservice wrapper V1
  *
  */
 @Stateless(mappedName="gameofkrownsControllServiceWS-v0.0.2")
@@ -40,7 +30,8 @@ import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllSe
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceWSV1 {
 	
-	@EJB(mappedName="gameofkrownsControllServiceBean-v0.0.2")
+	@EJB(beanName = "gameofkrownsControllServiceBean-v0.0.2",
+         mappedName="gameofkrownsControllServiceBean-v0.0.2")
 	private GameofKrownsControllServiceV1 serviceBean;
 	
 	/**
@@ -59,8 +50,8 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 			partName = "PlayerPassword", 
 					targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") String password) 
 	throws 
-		PlayerNotFoundException, 
-		WrongPasswordException {
+            PlayerNotFoundException,
+            WrongPasswordException {
 		return (Set)serviceBean.getActiveGamesForPlayer(playerId, password);
 	}
 	
@@ -79,7 +70,7 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 			partName = "PlayerPassword", 
 			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") String password) 
 	throws 
-		PlayerAlreadyExistsException {
+            PlayerAlreadyExistsException {
 		return (PlayerEntity) serviceBean.registerPlayer(playerName, password);
 	}
 	
@@ -101,9 +92,9 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 			partName = "GameName", 
 			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:game") String gameName) 
 	throws 
-		GameAlreadyExistsException, 
-		PlayerNotFoundException, 
-		WrongPasswordException {
+            GameAlreadyExistsException,
+            PlayerNotFoundException,
+            WrongPasswordException {
 		return (GameEntity) serviceBean.createGame(playerId, password, gameName);
 	}
 	
@@ -124,12 +115,13 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") String password, 
 		@WebParam(name="GameId", 
 			partName = "GameId", 
-			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:game") Long gameId) 
-	throws 
-		PlayerNotFoundException, 
-		WrongPasswordException, 
-		GameNotFoundException, 
-		PlayerNotInvitedToGameException {
+			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:game") Long gameId)
+            throws
+            PlayerNotFoundException,
+            WrongPasswordException,
+            GameNotFoundException,
+            PlayerNotInvitedToGameException,
+            IllegalGameStateException {
 		serviceBean.acceptGame(playerId, password, gameId);
 	}
 	
@@ -140,7 +132,8 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 	 * @throws PlayerNotFoundException 
 	 */
 	@WebMethod(operationName="invitePlayers")
-	public void invitePlayers(@WebParam(name="PlayerId", 
+	public void invitePlayer(
+        @WebParam(name="PlayerId",
 			partName = "PlayerId", 
 			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") Long playerId, 
 		@WebParam(name="PlayerPassword", 
@@ -149,19 +142,23 @@ public class GameControllServiceWSBeanV1 implements GameofKrownsControllServiceW
 		@WebParam(name="GameId", 
 			partName = "GameId", 
 			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:game") Long gameId,	
-		@WebParam(name="Player", 
-			partName="Player", 
-			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") Set<Long> playerIdsToInvite) 
+		@WebParam(name="PlayerIdToInvite",
+			partName="PlayerIdToInvite",
+			targetNamespace="urn:nu.danielsundberg.gameofkrowns:gamecontrollservice:player") Long playerIdToInvite)
 	throws 
-		PlayerNotFoundException, WrongPasswordException, GameNotFoundException {
-		serviceBean.invitePlayers(playerId, password, gameId, playerIdsToInvite);
+            PlayerNotFoundException,
+            WrongPasswordException,
+            GameNotFoundException {
+		serviceBean.invitePlayer(playerId, password, gameId, playerIdToInvite);
 	}
 
 	@Override
 	@WebMethod(exclude = true)
 	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(Long playerId,
-			String password) throws PlayerNotFoundException,
-			WrongPasswordException {
+			String password)
+    throws
+            PlayerNotFoundException,
+            WrongPasswordException {
 		throw new PlayerNotFoundException("Method incompatible with WS Implementation, use getActiveGamesForPlayerWS.");
 	}
 

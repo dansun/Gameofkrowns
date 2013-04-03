@@ -2,8 +2,6 @@ package nu.danielsundberg.gameofkrowns.domain.game;
 
 /**
  * All counties in game.
- * @author dansun
- *
  */
 public enum CountyName {
 	BLEKINGE("Blekinge län"),

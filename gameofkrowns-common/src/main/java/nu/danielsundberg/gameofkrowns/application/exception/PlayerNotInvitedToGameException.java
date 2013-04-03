@@ -1,11 +1,7 @@
 package nu.danielsundberg.gameofkrowns.application.exception;
 
-
 /**
- * PlayerNotInvitedToGame exception and webfault configuration.
- * 
- * @author dansun
- *
+ * Player not invited to game exception.
  */
 public class PlayerNotInvitedToGameException extends Exception {
 

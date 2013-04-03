@@ -16,16 +16,24 @@ public class GameCountyEntity {
     @Column(name="GAME_COUNTYID")
     private long gameCountyId;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "GAME_ID", referencedColumnName = "GAMEID")
     private GameEntity game;
 
-    @OneToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "COUNTY_ID", referencedColumnName = "COUNTYID")
     private CountyEntity county;
 
+    public void setGame(GameEntity gameEntity) {
+        this.game = gameEntity;
+    }
+
     public GameEntity getGame() {
         return game;
+    }
+
+    public void setCounty(CountyEntity countyEntity) {
+        this.county = countyEntity;
     }
 
     public CountyEntity getCounty() {

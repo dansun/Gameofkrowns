@@ -1,16 +1,15 @@
 package nu.danielsundberg.gameofkrowns.domain;
 
 
-
+import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
 
 /**
- * A game of krowns move
- * 
- * @author dansun
+ * A Game of Krowns move
+ *
  * @param <GAME>
  *
  */
-public abstract interface Move<PLAYER, GAME> extends Event<GAME> {
+public abstract interface Move<PLAYER, GAME, GAMETURN> extends Event<GAME> {
 	
 	public PLAYER getPlayer();
 
@@ -19,6 +18,9 @@ public abstract interface Move<PLAYER, GAME> extends Event<GAME> {
 	public MoveType getMoveType();
 	
 	public EventType getEventType();
-	
+
+    public GameTurn<GAME> getGameTurn();
+
+    public void setGameTurn(GAMETURN gameTurn);
 
 }

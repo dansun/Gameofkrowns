@@ -1,11 +1,7 @@
 package nu.danielsundberg.gameofkrowns.application.exception;
 
-
 /**
- * PlayerNotFound exception and webfault configuration.
- * 
- * @author dansun
- *
+ * Game not found exception
  */
 public class GameNotFoundException extends Exception {
 

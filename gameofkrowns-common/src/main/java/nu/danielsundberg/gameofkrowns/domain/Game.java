@@ -1,5 +1,6 @@
 package nu.danielsundberg.gameofkrowns.domain;
 
+import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
 import org.joda.time.DateTime;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -47,5 +48,8 @@ public interface Game<PLAYER, EVENT, COUNTY> extends Serializable {
 
     @XmlElement
 	public Set<COUNTY> getCounties();
+
+    @XmlElement
+    public GameTurn getCurrentGameTurn();
 
 }

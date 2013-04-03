@@ -1,4 +1,14 @@
 Game of Krowns
 ===========
 
-Turn based serverbased game with clients connecting to JSON or WS api.
+Turn based serverdriven strategy game.
+
+Server APIs: 
+ * SOAP
+ * JSON
+
+Clients:
+ * Android
+ * WebGL (not started yet)
+ * Desktop (not started yet)
+

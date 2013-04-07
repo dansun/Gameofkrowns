@@ -1,4 +1,13 @@
-Game of Krowns
-===========
 
-Turn based serverbased game with clients connecting to JSON or WS api.
+Game of Krowns <img src="http://www.danielsundberg.nu/images/gameofkrowns_60x60.png"/> 
+===========
+Turn based serverdriven strategy game.
+
+Server APIs: 
+ * SOAP
+ * JSON
+
+Clients:
+ * Android
+ * WebGL (not started yet)
+ * Desktop (not started yet)

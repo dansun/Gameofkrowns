@@ -1,10 +1,12 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
 import nu.danielsundberg.gameofkrowns.access.domain.events.GameTurnEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
+import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.GameState;
+import nu.danielsundberg.gameofkrowns.domain.Player;
 import nu.danielsundberg.gameofkrowns.domain.events.GameTurn;
+import nu.danielsundberg.gameofkrowns.domain.game.County;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.joda.time.DateTime;
@@ -16,7 +18,7 @@ import java.util.*;
 /**
  * A Game of Krowns
  *
- * @author dansun
+
  *
  */
 @Entity
@@ -28,7 +30,7 @@ import java.util.*;
                     "FROM GameEntity AS game " +
                     "WHERE game.gameName = :gameName")
 })
-public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>, Serializable {
+public class GameEntity implements Game, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -109,8 +111,8 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 		}
 	}
 
-	public DateTime getRegistrationTime() {
-		return registrationTime!=null?new DateTime(registrationTime):null;
+	public Date getRegistrationTime() {
+		return registrationTime;
 	}
 
 	@PrePersist
@@ -119,7 +121,7 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 		this.registrationTime = new DateTime().toDate();
 	}
 
-	public PlayerEntity getOwner() {
+	public Player getOwningPlayer() {
 		return owner.getPlayer();
 	}
 
@@ -127,65 +129,108 @@ public class GameEntity implements Game<PlayerEntity, EventEntity, CountyEntity>
 		this.owner = owner;
 	}
 
+    public Long getOwningPlayerId() {
+        return this.getOwningPlayer().getPlayerId();
+    }
+
     public void addInvitedPlayer(GameInvitationEntity gameInvitationEntity) {
         this.gameInvitations.add(gameInvitationEntity);
     }
 
-	public Set<PlayerEntity> getInvitedPlayers() {
-        Set<PlayerEntity> invitedPlayers = new LinkedHashSet<PlayerEntity>();
+	public Set<Player> getInvitedPlayers() {
+        Set<Player> invitedPlayers = new LinkedHashSet<Player>();
         for(GameInvitationEntity invitationEntity : this.gameInvitations) {
             invitedPlayers.add(invitationEntity.getPlayer());
         }
 		return invitedPlayers;
 	}
 
+    public Set<Long> getInvitedPlayerIds() {
+        Set<Long> invitedPlayerIds = new HashSet<Long>();
+        for(Player playerEntity : this.getInvitedPlayers()) {
+            invitedPlayerIds.add(playerEntity.getPlayerId());
+        }
+        return invitedPlayerIds;
+    }
+
     public void addGamePlayer(GamePlayerEntity gamePlayer) {
         this.players.add(gamePlayer);
     }
 
-	public Set<PlayerEntity> getPlayers() {
-        Set<PlayerEntity> gamePlayers = new LinkedHashSet<PlayerEntity>();
+	public Set<Player> getPlayers() {
+        Set<Player> gamePlayers = new LinkedHashSet<Player>();
         for(GamePlayerEntity gamePlayerEntity : players) {
             gamePlayers.add(gamePlayerEntity.getPlayer());
         }
 		return gamePlayers;
 	}
 
+    public Set<Long> getPlayerIds() {
+        Set<Long> playerIds = new HashSet<Long>();
+        for(Player playerEntity : this.getPlayers()) {
+            playerIds.add(playerEntity.getPlayerId());
+        }
+        return playerIds;
+    }
+
     public void addEvent(GameEventEntity gameEventEntity) {
         this.events.add(gameEventEntity);
     }
 
-	public SortedSet<EventEntity> getEvents() {
-        SortedSet<EventEntity> gameEvents = new TreeSet<EventEntity>();
+	public SortedSet<Event> getEvents() {
+        SortedSet<Event> gameEvents = new TreeSet<Event>();
         for(GameEventEntity gameEventEntity : events) {
             gameEvents.add(gameEventEntity.getEvent());
         }
 		return gameEvents;
 	}
 
+    public SortedSet<Long> getEventIds() {
+        SortedSet<Long> eventIds = new TreeSet<Long>();
+        for(Event eventEntity : this.getEvents()) {
+            eventIds.add(eventEntity.getEventId());
+        }
+        return eventIds;
+    }
+
     public void addGameCounty(GameCountyEntity gameCountyEntity) {
         this.counties.add(gameCountyEntity);
     }
 
-	public Set<CountyEntity> getCounties() {
-        Set<CountyEntity> gameCounties = new LinkedHashSet<CountyEntity>();
+	public Set<County> getCounties() {
+        Set<County> gameCounties = new LinkedHashSet<County>();
         for(GameCountyEntity gameCountyEntity : counties) {
             gameCounties.add(gameCountyEntity.getCounty());
         }
 		return gameCounties;
 	}
 
+    public Set<Long> getCountyIds() {
+        Set<Long> countyIds = new HashSet<Long>();
+        for(County countyEntity : this.getCounties()) {
+            countyIds.add(countyEntity.getCountyId());
+        }
+        return countyIds;
+    }
+
     public GameTurn getCurrentGameTurn() {
         GameTurnEntity gameTurnEntity = null;
-        for(EventEntity event : getEvents()) {
+        for(Event event : getEvents()) {
             if(event instanceof GameTurnEntity) {
                 if(gameTurnEntity == null ||
-                        gameTurnEntity.getRegistrationTime().isBefore(event.getRegistrationTime())) {
+                        new DateTime(gameTurnEntity.getRegistrationTime())
+                                .isBefore(new DateTime(event.getRegistrationTime()))) {
                     gameTurnEntity = (GameTurnEntity) event;
                 }
             }
         }
         return gameTurnEntity;
+    }
+
+    public Long getCurrentGameTurnId() {
+        return this.getCurrentGameTurn()!=null?
+                this.getCurrentGameTurn().getEventId():
+                null;
     }
 
 }

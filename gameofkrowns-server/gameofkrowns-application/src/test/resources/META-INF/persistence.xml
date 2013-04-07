@@ -16,6 +16,7 @@
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameEndedEntity</class>
         <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameTurnEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.events.GameStartedEntity</class>
+        <class>nu.danielsundberg.gameofkrowns.access.domain.events.PlayerFundingEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity</class>
 	    <class>nu.danielsundberg.gameofkrowns.access.domain.game.counties.BlekingeEntity</class>

@@ -2,6 +2,10 @@ package nu.danielsundberg.gameofkrowns.domain.moves;
 
 import nu.danielsundberg.gameofkrowns.domain.Move;
 
-public interface Propaganda<PLAYER, GAME, GAMETURN> extends Move<PLAYER, GAME, GAMETURN> {
+import java.math.BigDecimal;
+
+public interface Propaganda extends Move {
+
+    public BigDecimal getAmount();
 
 }

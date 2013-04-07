@@ -1,15 +1,13 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game.counties;
 
-import javax.persistence.Entity;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
 import nu.danielsundberg.gameofkrowns.domain.game.counties.Vasterbotten;
 
+import javax.persistence.Entity;
+
 @Entity
-public class VasterbottenEntity extends CountyEntity implements Vasterbotten<GameEntity, InfluenceEntity> {
+public class VasterbottenEntity extends CountyEntity implements Vasterbotten {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,8 +15,4 @@ public class VasterbottenEntity extends CountyEntity implements Vasterbotten<Gam
 		this.countyname = CountyName.VASTERBOTTEN;
 	}
 
-	public CountyName getCountyname() {
-		return this.countyname;
-	}
-	
 }

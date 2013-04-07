@@ -7,85 +7,89 @@ import nu.danielsundberg.gameofkrowns.domain.Player;
 import org.jboss.resteasy.annotations.providers.jaxb.json.BadgerFish;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;
 import java.util.Set;
 
+/**
+ * Game of Krowns REST api V1
+ */
 @Path("gamecontrollservice")
 public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllServiceV1 {
 
     @GET
-    @Path("get/player/with/playername/{playerName}/and/password/{password}")
-    @Produces("application/json")
+    @Path("player")
+    @Produces(MediaType.APPLICATION_JSON)
     @BadgerFish
     @Override
-    Player<?> getPlayer(
-            @PathParam("playerName") String playerName,
-            @PathParam("password") String password)
+    public Player getPlayer(
+            @QueryParam("playerName") String playerName,
+            @QueryParam("password") String password)
     throws
             PlayerNotFoundException,
             WrongPasswordException;
 
     @GET
-	@Path("get/active/games/for/player/{playerId}/with/password/{password}")
-	@Produces("application/json")
-	@BadgerFish
+	@Path("game/active")
+    @Produces(MediaType.APPLICATION_JSON)
+    @BadgerFish
 	@Override
-	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password)
+	public Set<Game> getActiveGamesForPlayer(
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException;
 
-	@GET
-	@Path("register/player/with/playername/{playerName}/and/password/{password}")
-	@Produces("application/json")
+	@PUT
+	@Path("player")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
-	public Player<?> registerPlayer(
-			@PathParam("playerName") String playerName, 
-			@PathParam("password") String password) 
+	public Player registerPlayer(
+			@QueryParam("playerName") String playerName,
+			@QueryParam("password") String password)
 	throws 
 			PlayerAlreadyExistsException;
 
-	@GET
-	@Path("register/game/with/gamename/{gameName}/for/player/{playerId}/with/password/{password}")
-	@Produces("application/json")
+	@PUT
+	@Path("game")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
-	public Game<?,?,?> createGame(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password, 
-			@PathParam("gameName") String gameName)
+	public Game createGame(
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameName") String gameName)
 	throws 
 			GameAlreadyExistsException, 
 			PlayerNotFoundException,
 			WrongPasswordException;
 
-	@GET
-	@Path("invite/player/{playerIdToInvite}/to/game/{gameId}/for/player/{playerId}/with/password/{password}")
-	@Produces("application/json")
+	@PUT
+	@Path("game/invite")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
 	public void invitePlayer(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password, 
-			@PathParam("gameId") Long gameId,
-			@PathParam("playerIdToInvite") Long playerToInvite)
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameId") Long gameId,
+			@QueryParam("playerIdToInvite") Long playerToInvite)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException, 
 			GameNotFoundException;
 
-	@GET
-	@Path("accept/invitation/to/game/{gameId}/for/player/{playerId}/with/password/{password}")
-	@Produces("application/json")
+	@PUT
+	@Path("game/accept")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
 	public void acceptGame(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password, 
-			@PathParam("gameId") Long gameId)
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameId") Long gameId)
             throws
             PlayerNotFoundException,
             WrongPasswordException,
@@ -93,31 +97,32 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
             PlayerNotInvitedToGameException, IllegalGameStateException;
 	
 	@GET
-	@Path("get/game/{gameId}/for/player/{playerId}/with/password/{password}")
-	@Produces("application/json")
+	@Path("game")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
-	public Game<?, ?, ?> getGame(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password, 
-			@PathParam("gameId")Long gameId)
+	public Game getGame(
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameId")Long gameId)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException,
 			GameNotFoundException, 
 			PlayerNotInvitedToGameException;
 	
-	@GET
-	@Path("report/bribe/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
-	@Produces("application/json")
+	@PUT
+	@Path("game/bribe")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
 	public void reportBribeMove(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password, 
-			@PathParam("gameId") Long gameId,
-			@PathParam("countyName") String countyName, 
-			@PathParam("amount") BigDecimal amount)
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameId") Long gameId,
+            @QueryParam("turnId") Long turnId,
+			@QueryParam("countyName") String countyName,
+			@QueryParam("amount") BigDecimal amount)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException,
@@ -126,16 +131,17 @@ public interface GameofKrownsControllServiceJSONV1 extends GameofKrownsControllS
 			IllegalMoveException;
 	
 	@GET
-	@Path("report/propaganda/in/county/{countyName}/with/{amount}/for/player/{playerId}/with/password/{password}/for/game/{gameId}")
-	@Produces("application/json")
+	@Path("game/propaganda")
+    @Produces(MediaType.APPLICATION_JSON)
 	@BadgerFish
 	@Override
 	public void reportPropagandaMove(
-			@PathParam("playerId") Long playerId, 
-			@PathParam("password") String password,
-			@PathParam("gameId") Long gameId, 
-			@PathParam("countyName") String countyName, 
-			@PathParam("amount") BigDecimal amount)
+			@QueryParam("playerId") Long playerId,
+			@QueryParam("password") String password,
+			@QueryParam("gameId") Long gameId,
+            @QueryParam("turnId") Long turnId,
+			@QueryParam("countyName") String countyName,
+			@QueryParam("amount") BigDecimal amount)
 	throws 
 			PlayerNotFoundException, 
 			WrongPasswordException,

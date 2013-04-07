@@ -1,16 +1,16 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game;
 
-import java.math.BigDecimal;
+import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
+import nu.danielsundberg.gameofkrowns.domain.game.County;
+import nu.danielsundberg.gameofkrowns.domain.game.Influence;
 
 import javax.persistence.*;
-
-import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
-import nu.danielsundberg.gameofkrowns.domain.game.Influence;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "INFLUENCES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class InfluenceEntity implements Influence<PlayerEntity, CountyEntity>{
+public class InfluenceEntity implements Influence {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -31,15 +31,15 @@ public class InfluenceEntity implements Influence<PlayerEntity, CountyEntity>{
 	@Column(name="AMOUNT")
 	private BigDecimal amount;
 
-	public Long getInfluenceid() {
+	public Long getInfluenceId() {
 		return influenceid;
 	}
 
-	public void setInfluenceid(Long influenceid) {
+	public void setInfluenceId(Long influenceid) {
 		this.influenceid = influenceid;
 	}
 
-	public CountyEntity getCounty() {
+	public County getCounty() {
 		return county;
 	}
 
@@ -47,7 +47,11 @@ public class InfluenceEntity implements Influence<PlayerEntity, CountyEntity>{
 		this.county = county;
 	}
 
-	public BigDecimal getAmount() {
+    public Long getCountyId() {
+        return this.county.getCountyId();
+    }
+
+    public BigDecimal getAmount() {
 		return amount;
 	}
 
@@ -62,5 +66,9 @@ public class InfluenceEntity implements Influence<PlayerEntity, CountyEntity>{
 	public void setPlayer(PlayerEntity player) {
 		this.player = player;
 	}
+
+    public Long getPlayerId() {
+        return this.player.getPlayerId();
+    }
 
 }

@@ -3,12 +3,10 @@ package nu.danielsundberg.gameofkrowns.domain.events;
 import nu.danielsundberg.gameofkrowns.domain.Event;
 
 /**
- * Event representing end of a game
+ * Event representing end of a game.
  */
-public interface GameEnded<PLAYER, GAME> extends Event<GAME> {
+public interface GameEnded extends Event {
 
-	public PLAYER getWinningPlayer();
+	public Long getWinningPlayerId();
 
-	public void setWinningPlayer(PLAYER winningPlayer);
-	
 }

@@ -1,13 +1,12 @@
 package nu.danielsundberg.droid.gameofkrowns.game.model;
 
-import java.util.Date;
-
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
-
 import org.joda.time.DateTime;
 
-public abstract class EventImpl implements Event<GameImpl> {
+import java.util.Date;
+
+public abstract class EventImpl implements Event {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,14 +21,14 @@ public abstract class EventImpl implements Event<GameImpl> {
 	
 	public int compareTo(EventImpl o) {
 		if(o.getRegistrationTime()!=null && this.getRegistrationTime() !=null) {
-			if(o.getRegistrationTime().isEqual(this.getRegistrationTime())) {
+			if(new DateTime(o.getRegistrationTime()).isEqual(new DateTime(this.getRegistrationTime()))) {
 				if(o.getEventId()!=null && this.getEventId() !=null) {
 					return o.getEventId().compareTo(this.eventId);
 				} else {
 					return -1;
 				}
 			} else {
-				if(o.getRegistrationTime().isBefore(this.getRegistrationTime())) {
+				if(new DateTime(o.getRegistrationTime()).isBefore(new DateTime(this.getRegistrationTime()))) {
 					return 1;
 				} else {
 					return -1;
@@ -60,8 +59,8 @@ public abstract class EventImpl implements Event<GameImpl> {
 		}
 	}
 	
-	public DateTime getRegistrationTime() {
-		return registrationTime!=null?new DateTime(registrationTime):null;
+	public Date getRegistrationTime() {
+		return registrationTime;
 	}
 
 	public void setRegistrationTime(DateTime registrationTime) {

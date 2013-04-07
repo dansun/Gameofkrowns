@@ -1,15 +1,13 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game.counties;
 
-import javax.persistence.Entity;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
 import nu.danielsundberg.gameofkrowns.domain.game.counties.Orebro;
 
+import javax.persistence.Entity;
+
 @Entity
-public class OrebroEntity extends CountyEntity implements Orebro<GameEntity, InfluenceEntity> {
+public class OrebroEntity extends CountyEntity implements Orebro {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,8 +15,4 @@ public class OrebroEntity extends CountyEntity implements Orebro<GameEntity, Inf
 		this.countyname = CountyName.OREBRO;
 	}
 
-	public CountyName getCountyname() {
-		return this.countyname;
-	}
-	
 }

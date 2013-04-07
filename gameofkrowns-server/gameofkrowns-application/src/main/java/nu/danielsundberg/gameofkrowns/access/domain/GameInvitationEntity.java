@@ -1,5 +1,7 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
+import nu.danielsundberg.gameofkrowns.domain.Player;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,7 +28,7 @@ public class GameInvitationEntity {
         return game;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return invitedPlayer;
     }
 

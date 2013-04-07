@@ -1,24 +1,18 @@
 package nu.danielsundberg.gameofkrowns.domain.game;
 
+import nu.danielsundberg.gameofkrowns.domain.Player;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public interface Influence<PLAYER, COUNTY> extends Serializable {
-	
-	public Long getInfluenceid();
+public interface Influence extends Serializable {
 
-	public void setInfluenceid(Long influenceid);
+	public Long getInfluenceId();
 
-	public COUNTY getCounty();
+	public County getCounty();
 
-	public void setCounty(COUNTY county);
-	
 	public BigDecimal getAmount();
 
-	public void setAmount(BigDecimal amount);
-
-	public PLAYER getPlayer();
-
-	public void setPlayer(PLAYER player);
+	public Player getPlayer();
 
 }

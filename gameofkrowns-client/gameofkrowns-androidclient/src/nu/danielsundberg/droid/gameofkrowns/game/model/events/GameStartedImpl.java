@@ -8,7 +8,7 @@ import nu.danielsundberg.gameofkrowns.domain.events.GameStarted;
 
 /**
  * Event representing a start of a game
- * @author dansun
+
  *
  */
 public class GameStartedImpl extends EventImpl implements GameStarted<GameImpl> {

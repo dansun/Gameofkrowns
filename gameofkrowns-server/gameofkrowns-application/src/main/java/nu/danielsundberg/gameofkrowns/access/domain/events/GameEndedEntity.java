@@ -1,7 +1,6 @@
 package nu.danielsundberg.gameofkrowns.access.domain.events;
 
 import nu.danielsundberg.gameofkrowns.access.domain.EventEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
 import nu.danielsundberg.gameofkrowns.domain.events.GameEnded;
@@ -14,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue(value = "GAME_FINISH")
 @Table(name = "GAME_FINISHED_EVENT")
-public class GameEndedEntity extends EventEntity implements GameEnded<PlayerEntity, GameEntity> {
+public class GameEndedEntity extends EventEntity implements GameEnded {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,4 +33,8 @@ public class GameEndedEntity extends EventEntity implements GameEnded<PlayerEnti
 		this.winningPlayer = winningPlayer;
 	}
 
+    @Override
+    public Long getWinningPlayerId() {
+        return this.winningPlayer.getPlayerId();
+    }
 }

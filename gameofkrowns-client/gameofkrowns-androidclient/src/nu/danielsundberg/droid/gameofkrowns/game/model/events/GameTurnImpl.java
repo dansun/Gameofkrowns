@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 
 /**
  * Event representing one turn complete of a game, IE all players have registered a move.
- * @author dansun
+
  *
  */
 public class GameTurnImpl extends EventImpl implements GameTurn<GameImpl> {

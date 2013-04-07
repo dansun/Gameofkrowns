@@ -1,10 +1,10 @@
 package nu.danielsundberg.gameofkrowns.access.domain;
 
 import nu.danielsundberg.gameofkrowns.domain.Player;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,7 +20,7 @@ import java.util.Set;
                         "FROM PlayerEntity AS player " +
                         "WHERE player.playerName = :playerName")
 })
-public class PlayerEntity implements Player<GameEntity>, Serializable {
+public class PlayerEntity implements Player, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,7 +64,6 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 		return playerName;
 	}
 
-    @JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -77,7 +76,6 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
         this.invitedGames.add(gameInvitationEntity);
     }
 
-    @JsonIgnore
 	public Set<GameEntity> getInvitedGames() {
 		Set<GameEntity> gamesInvitedTo = new LinkedHashSet<GameEntity>();
         for(GameInvitationEntity invitationEntity : this.invitedGames) {
@@ -86,11 +84,19 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
         return gamesInvitedTo;
 	}
 
+    @Override
+    public Set<Long> getInvitedGameIds() {
+        Set<Long> invitedGameIds = new HashSet<Long>();
+        for(GameEntity gameEntity : this.getInvitedGames()) {
+            invitedGameIds.add(gameEntity.getGameId());
+        }
+        return invitedGameIds;
+    }
+
     public void addOwnedGame(OwnedGameEntity ownedGameEntity) {
         this.ownedGames.add(ownedGameEntity);
     }
 
-    @JsonIgnore
 	public Set<GameEntity> getOwnedGames() {
         Set<GameEntity> ownedGames = new LinkedHashSet<GameEntity>();
         for(OwnedGameEntity ownedGameEntity : this.ownedGames) {
@@ -99,11 +105,19 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
 		return ownedGames;
 	}
 
+    @Override
+    public Set<Long> getOwnedGameIds() {
+        Set<Long> ownedGameIds = new HashSet<Long>();
+        for(GameEntity gameEntity : this.getOwnedGames()) {
+            ownedGameIds.add(gameEntity.getGameId());
+        }
+        return ownedGameIds;
+    }
+
     public void addGamePlayer(GamePlayerEntity playingGame) {
         this.playingGames.add(playingGame);
     }
 
-    @JsonIgnore
 	public Set<GameEntity> getPlayingGames() {
         Set<GameEntity> playerGames = new LinkedHashSet<GameEntity>();
         for(GamePlayerEntity gamePlayerEntity : playingGames) {
@@ -111,5 +125,14 @@ public class PlayerEntity implements Player<GameEntity>, Serializable {
         }
 		return playerGames;
 	}
+
+    @Override
+    public Set<Long> getPlayingGameIds() {
+        Set<Long> playingGameIds = new HashSet<Long>();
+        for(GameEntity gameEntity : this.getPlayingGames()) {
+            playingGameIds.add(gameEntity.getGameId());
+        }
+        return playingGameIds;
+    }
 
 }

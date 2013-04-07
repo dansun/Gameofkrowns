@@ -49,8 +49,14 @@
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-ejb_3.1_spec</artifactId>
 			<scope>provided</scope>
-        </dependency>	
-		
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>2.3.1.GA</version>
+            <scope>provided</scope>
+        </dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

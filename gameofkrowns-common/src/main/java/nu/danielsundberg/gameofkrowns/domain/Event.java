@@ -1,25 +1,18 @@
 package nu.danielsundberg.gameofkrowns.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import org.joda.time.DateTime;
+public abstract interface Event extends Comparable<Event>, Serializable {
 
-public abstract interface Event<GAME> extends Comparable<Event<GAME>>, Serializable {
+	public Date getRegistrationTime();
 
-	public DateTime getRegistrationTime();
-
-	public void setRegistrationTime(DateTime registrationTime);
-
-	public GAME getGame();
-
-	public void setGame(GAME game);
+	public Long getGameId();
 
 	public Long getEventId();
 
-	public void setEventId(Long eventId);
-	
 	public EventType getEventType();
 
-	public int compareTo(Event<GAME> o);
+	public int compareTo(Event o);
 	
 }

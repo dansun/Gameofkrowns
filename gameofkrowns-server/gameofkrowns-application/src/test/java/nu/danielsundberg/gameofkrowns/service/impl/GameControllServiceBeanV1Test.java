@@ -1,15 +1,5 @@
 package nu.danielsundberg.gameofkrowns.service.impl;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.PlayerEntity;
 import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
@@ -18,11 +8,19 @@ import nu.danielsundberg.gameofkrowns.application.service.impl.GameofKrownsContr
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.Player;
 import nu.danielsundberg.gameofkrowns.test.GameofKrownsApplicationTestCase;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class GameControllServiceBeanV1Test extends GameofKrownsApplicationTestCase {
 
@@ -41,7 +39,7 @@ public class GameControllServiceBeanV1Test extends GameofKrownsApplicationTestCa
 		when(entityManager.find(PlayerEntity.class, PLAYER_ID)).thenReturn(player);
 		when(entityManager.createNamedQuery("player.findByPlayerName")).thenReturn(query);
 		when(query.getSingleResult()).thenReturn(player);
-		when(game.getOwner()).thenReturn(player);
+		when(game.getOwningPlayer()).thenReturn(player);
 		when(game.getGameName()).thenReturn(GAME_NAME);
 		when(game.getGameId()).thenReturn(GAME_ID);
 		when(player.getPassword()).thenReturn(PLAYER_PASSWORD);
@@ -51,7 +49,7 @@ public class GameControllServiceBeanV1Test extends GameofKrownsApplicationTestCa
 	
 	@Test
 	public void testGetGamesForPlayer() throws Exception {
-		Set<Game<?,?,?>> games = service.getActiveGamesForPlayer(PLAYER_ID, PLAYER_PASSWORD);
+		Set<Game> games = service.getActiveGamesForPlayer(PLAYER_ID, PLAYER_PASSWORD);
 		assert(games.contains(game));
 	}
 	

@@ -2,7 +2,6 @@ package nu.danielsundberg.gameofkrowns.access.domain;
 
 import nu.danielsundberg.gameofkrowns.domain.Event;
 import nu.danielsundberg.gameofkrowns.domain.EventType;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -12,7 +11,7 @@ import java.util.Date;
 @Table(name = "EVENTS")
 @DiscriminatorColumn(name = "EVENTTYPE", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class EventEntity implements Event<GameEntity> {
+public abstract class EventEntity implements Event {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -42,16 +41,17 @@ public abstract class EventEntity implements Event<GameEntity> {
     /**
 	 * Compare using registrationtime.
 	 */
-	public int compareTo(Event<GameEntity> o) {
+    @Override
+	public int compareTo(Event o) {
 		if(o.getRegistrationTime()!=null && this.getRegistrationTime() !=null) {
-			if(o.getRegistrationTime().isEqual(this.getRegistrationTime())) {
+			if(new DateTime(o.getRegistrationTime()).isEqual(new DateTime(this.getRegistrationTime()))) {
 				if(o.getEventId()!=null && this.getEventId() !=null) {
 					return o.getEventId().compareTo(this.eventId);
 				} else {
 					return -1;
 				}
 			} else {
-				if(o.getRegistrationTime().isBefore(this.getRegistrationTime())) {
+				if(new DateTime(o.getRegistrationTime()).isBefore(new DateTime(this.getRegistrationTime()))) {
 					return 1;
 				} else {
 					return -1;
@@ -82,17 +82,15 @@ public abstract class EventEntity implements Event<GameEntity> {
 		}
 	}
 
-
-	
-	public DateTime getRegistrationTime() {
-		return registrationTime!=null?new DateTime(registrationTime):null;
+    @Override
+	public Date getRegistrationTime() {
+		return registrationTime;
 	}
 
-	public void setRegistrationTime(DateTime registrationTime) {
-		this.registrationTime = registrationTime.toDate();
+	public void setRegistrationTime(Date registrationTime) {
+		this.registrationTime = registrationTime;
 	}
 
-    @JsonIgnore
 	public GameEntity getGame() {
 		return game;
 	}
@@ -101,14 +99,21 @@ public abstract class EventEntity implements Event<GameEntity> {
 		this.game = game;
 	}
 
-	public Long getEventId() {
+    @Override
+    public Long getGameId() {
+        return this.game.getGameId();
+    }
+
+    @Override
+    public Long getEventId() {
 		return eventId;
 	}
 
 	public void setEventId(Long eventId) {
 		this.eventId = eventId;
 	}
-	
+
+    @Override
 	public EventType getEventType() {
 		return eventType;
 	}

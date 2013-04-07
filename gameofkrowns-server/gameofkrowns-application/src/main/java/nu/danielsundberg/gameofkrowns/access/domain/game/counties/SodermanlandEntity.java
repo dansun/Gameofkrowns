@@ -1,15 +1,13 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game.counties;
 
-import javax.persistence.Entity;
-
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.InfluenceEntity;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
 import nu.danielsundberg.gameofkrowns.domain.game.counties.Sodermanland;
 
+import javax.persistence.Entity;
+
 @Entity
-public class SodermanlandEntity extends CountyEntity implements Sodermanland<GameEntity, InfluenceEntity> {
+public class SodermanlandEntity extends CountyEntity implements Sodermanland {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,8 +15,4 @@ public class SodermanlandEntity extends CountyEntity implements Sodermanland<Gam
 		this.countyname = CountyName.SODERMANLAND;
 	}
 
-	public CountyName getCountyname() {
-		return this.countyname;
-	}
-	
 }

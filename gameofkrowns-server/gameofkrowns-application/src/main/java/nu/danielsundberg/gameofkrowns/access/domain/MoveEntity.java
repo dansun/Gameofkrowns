@@ -34,7 +34,7 @@ import java.io.Serializable;
 })
 @DiscriminatorColumn(name = "MOVETYPE", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class MoveEntity extends EventEntity implements Move<PlayerEntity, GameEntity, GameTurnEntity>, Serializable{
+public abstract class MoveEntity extends EventEntity implements Move, Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -61,13 +61,14 @@ public abstract class MoveEntity extends EventEntity implements Move<PlayerEntit
 	public void setPlayer(PlayerEntity player) {
 		this.player = player;
 	}
-	
-	public MoveType getMoveType() {
+
+    public Long getPlayerId() {
+        return this.player.getPlayerId();
+    }
+
+    @Override
+    public MoveType getMoveType() {
 		return moveType;
-	}
-	
-	public final EventType getEventType() {
-		return EventType.GAME_MOVE;
 	}
 
     public void setGameTurn(GameTurnEntity gameTurn) {
@@ -78,12 +79,17 @@ public abstract class MoveEntity extends EventEntity implements Move<PlayerEntit
         return this.gameTurn;
     }
 
+    public Long getGameTurnId() {
+        return this.getGameTurn().getEventId();
+    }
+
     @Override
-    public int compareTo(Event<GameEntity> o) {
+    public int compareTo(Event o) {
         if(this.getEventId().equals(o.getEventId())) {
             return 0;
         } else {
             return -1;
         }
     }
+
 }

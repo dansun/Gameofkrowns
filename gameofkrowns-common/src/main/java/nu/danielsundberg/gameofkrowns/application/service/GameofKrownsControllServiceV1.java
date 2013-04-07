@@ -19,8 +19,9 @@ public interface GameofKrownsControllServiceV1 {
 	 * @return Set<Game>
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
+     * @return All active games for player.
 	 */
-	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(
+	public Set<Game> getActiveGamesForPlayer(
 			Long playerId, 
 			String password) 
 	throws 
@@ -33,8 +34,9 @@ public interface GameofKrownsControllServiceV1 {
 	 * @param password
 	 * @return Player
 	 * @throws PlayerAlreadyExistsException
+     * @return Registered player.
 	 */
-	public Player<?> registerPlayer(
+	public Player registerPlayer(
 			String playerName, 
 			String password) 
 	throws 
@@ -47,8 +49,9 @@ public interface GameofKrownsControllServiceV1 {
 	 * @return Player
 	 * @throws PlayerNotFoundException
      * @throws WrongPasswordException
+     * @return Found player.
 	 */
-	public Player<?> getPlayer(
+	public Player getPlayer(
 			String playerName, 
 			String password) 
 	throws 
@@ -64,8 +67,9 @@ public interface GameofKrownsControllServiceV1 {
 	 * @throws GameAlreadyExistsException
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
+     * @return Created game.
 	 */
-	public Game<?,?,?> createGame(
+	public Game createGame(
 			Long playerId, 
 			String password, 
 			String gameName) 
@@ -123,8 +127,9 @@ public interface GameofKrownsControllServiceV1 {
 	 * @throws WrongPasswordException
 	 * @throws GameNotFoundException
 	 * @throws PlayerNotInvitedToGameException
+     * @return Found game.
 	 */
-	public Game<?, ?, ?> getGame(
+	public Game getGame(
 			Long playerId,
 			String password,
 			Long gameId)
@@ -133,14 +138,15 @@ public interface GameofKrownsControllServiceV1 {
 			WrongPasswordException,
 			GameNotFoundException,
 			PlayerNotInvitedToGameException;
-	
+
 	/**
 	 * Report a bribe move
-	 * @param playerId
-	 * @param password
-	 * @param gameId
-	 * @param countyName
-	 * @param amount
+     * @param playerId Reporting player ID.
+     * @param password Reporting player password.
+     * @param gameId Game to register move for.
+     * @param turnId Turn in game to register move for.
+     * @param countyName County in game to register move on.
+     * @param amount Amount to register.
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
 	 * @throws GameNotFoundException
@@ -151,7 +157,8 @@ public interface GameofKrownsControllServiceV1 {
 			Long playerId,
 			String password,
 			Long gameId,
-			String countyName,
+            Long turnId,
+            String countyName,
 			BigDecimal amount)
 	throws
 			PlayerNotFoundException,
@@ -162,11 +169,12 @@ public interface GameofKrownsControllServiceV1 {
 
 	/**
 	 * Report a propaganda move
-	 * @param playerId
-	 * @param password
-	 * @param gameId
-	 * @param countyName
-	 * @param amount
+	 * @param playerId Reporting player ID.
+	 * @param password Reporting player password.
+	 * @param gameId Game to register move for.
+     * @param turnId Turn in game to register move for.
+	 * @param countyName County in game to register move on.
+	 * @param amount Amount to register.
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
 	 * @throws GameNotFoundException
@@ -177,6 +185,7 @@ public interface GameofKrownsControllServiceV1 {
 			Long playerId,
 			String password,
 			Long gameId,
+            Long turnId,
 			String countyName,
 			BigDecimal amount)
 		throws

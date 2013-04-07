@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.android.gcm.GCMBaseIntentService;
+import com.google.android.gcm.GCMRegistrar;
 import nu.danielsundberg.droid.gameofkrowns.CommonUtils;
 import nu.danielsundberg.droid.gameofkrowns.R;
+import nu.danielsundberg.droid.gameofkrowns.communication.GameofKrownsControllServiceClient;
 import nu.danielsundberg.droid.gameofkrowns.list.activity.GameofkrownsListActivity;
-import com.google.android.gcm.GCMRegistrar;
-import com.google.android.gcm.GCMBaseIntentService;
-
+import nu.danielsundberg.gameofkrowns.application.exception.PlayerNotFoundException;
+import nu.danielsundberg.gameofkrowns.application.exception.WrongPasswordException;
 
 
 /**
@@ -226,6 +228,17 @@ public class LoginActivity extends Activity {
 				return false;
 			}
 
+            GameofKrownsControllServiceClient client = new GameofKrownsControllServiceClient();
+            try {
+                client.getPlayer(mEmail, mPassword);
+                return true;
+            } catch (PlayerNotFoundException e) {
+                // TODO: register the new account here.
+                return false;
+            } catch (WrongPasswordException e) {
+                return false;
+            }
+
 //			for (String credential : DUMMY_CREDENTIALS) {
 //				String[] pieces = credential.split(":");
 //				if (pieces[0].equals(mEmail)) {
@@ -234,8 +247,7 @@ public class LoginActivity extends Activity {
 //				}
 //			}
 
-			// TODO: register the new account here.
-			return true;
+
 		}
 
 		@Override

@@ -1,10 +1,10 @@
 package nu.danielsundberg.gameofkrowns.access.domain.game;
 
 import nu.danielsundberg.gameofkrowns.access.domain.GameCountyEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.GameEntity;
+import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.game.County;
 import nu.danielsundberg.gameofkrowns.domain.game.CountyName;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import nu.danielsundberg.gameofkrowns.domain.game.Influence;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "COUNTIES")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-public abstract class CountyEntity implements County<GameEntity, InfluenceEntity> {
+public abstract class CountyEntity implements County {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
     private Long countyid;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="COUNTYNAME")
+	@Column(name="COUNTYNAME", updatable = false)
 	protected CountyName countyname;
 	
 	@OneToMany(mappedBy = "county", fetch = FetchType.EAGER)
@@ -33,16 +33,23 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
 	private GameCountyEntity gameCounty;
 
-	public Long getCountyid() {
+	public Long getCountyId() {
 		return countyid;
 	}
 
-	public void setCountyid(Long countyid) {
+	public void setCountyId(Long countyid) {
 		this.countyid = countyid;
 	}
-	
-	public Set<InfluenceEntity> getInfluences() {
-		return influences;
+
+    @Override
+    public CountyName getCountyname() {
+        return countyname;
+    }
+
+    public Set<Influence> getInfluences() {
+        Set<Influence> countyInfluences = new HashSet<Influence>();
+        countyInfluences.addAll(influences);
+		return countyInfluences;
 	}
 
 	public void setInfluences(Set<InfluenceEntity> influences) {
@@ -53,9 +60,12 @@ public abstract class CountyEntity implements County<GameEntity, InfluenceEntity
         this.gameCounty = gameCountyEntity;
     }
 
-    @JsonIgnore
-	public GameEntity getGame() {
+	public Game getGame() {
 		return gameCounty.getGame();
 	}
 
+    @Override
+    public Long getGameId() {
+        return this.gameCounty.getGame().getGameId();
+    }
 }

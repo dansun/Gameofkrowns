@@ -3,9 +3,9 @@ package nu.danielsundberg.gameofkrowns.application.service.impl;
 import nu.danielsundberg.gameofkrowns.access.domain.*;
 import nu.danielsundberg.gameofkrowns.access.domain.events.GameStartedEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.events.GameTurnEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.events.PlayerFundingEntity;
 import nu.danielsundberg.gameofkrowns.access.domain.game.CountyEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.counties.BlekingeEntity;
-import nu.danielsundberg.gameofkrowns.access.domain.game.counties.DalarnaEntity;
+import nu.danielsundberg.gameofkrowns.access.domain.game.counties.*;
 import nu.danielsundberg.gameofkrowns.application.exception.*;
 import nu.danielsundberg.gameofkrowns.application.service.GameofKrownsControllServiceV1;
 import nu.danielsundberg.gameofkrowns.domain.Game;
@@ -28,8 +28,9 @@ import java.util.Set;
 public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllServiceV1, Serializable {
 
 	private static final long serialVersionUID = 1L;
+    private static final BigDecimal PLAYER_INITIAL_GAME_FUNDING = BigDecimal.valueOf(100);
 
-	@PersistenceContext(unitName = "gameofkrownsPersistenceUnit")
+    @PersistenceContext(unitName = "gameofkrownsPersistenceUnit")
     private EntityManager entityManager;
 	
 	/**
@@ -40,7 +41,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException
 	 */
-	public Set<Game<?, ?, ?>> getActiveGamesForPlayer(
+	public Set<Game> getActiveGamesForPlayer(
 		Long playerId, 
 		String password) 
 	throws 
@@ -54,7 +55,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 		//
 		// Return games player is participating in
 		//
-		Set<Game<?,?,?>> games = new HashSet<Game<?,?,?>>();
+		Set<Game> games = new HashSet<Game>();
 		games.addAll(player.getPlayingGames());		
 		return games;	
 	}
@@ -66,7 +67,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player that has been registered.
 	 * @throws PlayerAlreadyExistsException
 	 */
-	public Player<?> registerPlayer(
+	public Player registerPlayer(
 		String playerName, 
 		String password) 
 	throws 
@@ -99,7 +100,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException 
 	 * @throws WrongPasswordException 
 	 */
-	public Game<?,?,?> createGame(
+	public Game createGame(
 			Long playerId, 
 			String password, 
 			String gameName) 
@@ -312,7 +313,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player with specified name.
 	 * @throws PlayerNotFoundException
 	 */
-	private Player<?> findPlayerByName(
+	private Player findPlayerByName(
 			String playerName) 
 	throws 
 			PlayerNotFoundException {
@@ -334,7 +335,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Game with specified game name.
 	 * @throws GameNotFoundException
 	 */
-	private Game<?,?,?> findGameByName(
+	private Game findGameByName(
 			String gameName) 
 	throws 
 			GameNotFoundException {
@@ -360,13 +361,19 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			PlayerEntity player, 
 			String password) 
 	throws 
-			WrongPasswordException {
+			WrongPasswordException,
+            PlayerNotFoundException {
 		//
 		// Compare give password with that of persisted players
 		//
-		if(!player.getPassword().equals(password)) {
-			throw new WrongPasswordException("Password for player with playerId "+player.getPlayerId()+" is wrong.");
-		}
+        if(player!=null) {
+            if(!player.getPassword().equals(password)) {
+                throw new WrongPasswordException("Password for player with playerId "+player.getPlayerId()+" is wrong.");
+            }
+        } else {
+            throw new PlayerNotFoundException("Player was not found.");
+        }
+
 	}
 	
 	/**
@@ -375,7 +382,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @return Player with specified id.
 	 * @throws PlayerNotFoundException
 	 */
-	private Player<?> findPlayerById(
+	private Player findPlayerById(
 			Long playerId) 
 	throws 
 			PlayerNotFoundException {
@@ -401,7 +408,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
      * @throws PlayerNotInvitedToGameException
      */
 	@Override
-	public GameEntity getGame(
+	public Game getGame(
 			Long playerId, 
 			String password, 
 			Long gameId)
@@ -422,7 +429,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
         GameEntity game = entityManager.find(GameEntity.class, gameId);
         if(game==null) {
             throw new GameNotFoundException("Game with gameId "+gameId+" is not registered.");
-        } else if(!game.getOwner().equals(player) &&
+        } else if(!game.getOwningPlayer().equals(player) &&
                 !game.getPlayers().contains(player)) {
             throw new PlayerNotInvitedToGameException("Player with playerId " +
                     playerId + " is not invited to, or owning, game with gameId " + gameId + " .");
@@ -449,6 +456,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
             Long playerId,
             String password,
             Long gameId,
+            Long turnId,
 			String countyName,
             BigDecimal amount)
     throws
@@ -469,11 +477,18 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
         GameEntity game = entityManager.find(GameEntity.class, gameId);
         if(game==null) {
             throw new GameNotFoundException("Game with gameId "+gameId+" is not registered.");
-        } else if(!game.getOwner().equals(player) &&
+        } else if(!game.getOwningPlayer().equals(player) &&
                 !game.getPlayers().contains(player)) {
             throw new PlayerNotInvitedToGameException("Player with playerId " +
                     playerId + " is not invited to, or owning, game with gameId " + gameId + " .");
         }
+
+        if(!game.getCurrentGameTurn().getEventId().equals(turnId)) {
+            throw new IllegalMoveException("Cant register move on other than current turn in game.");
+        }
+
+
+
 		
 	}
 
@@ -495,6 +510,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
             Long playerId,
             String password,
 			Long gameId,
+            Long turnId,
             String countyName,
             BigDecimal amount)
     throws
@@ -503,7 +519,26 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 			GameNotFoundException,
             PlayerNotInvitedToGameException,
 			IllegalMoveException {
-		// TODO Auto-generated method stub
+        //
+        // Find and validate registering player.
+        //
+        PlayerEntity player = entityManager.find(PlayerEntity.class, playerId);
+        validatePlayerPassword(player, password);
+
+        //
+        // Find and validate player for specified game.
+        //
+        GameEntity game = entityManager.find(GameEntity.class, gameId);
+        if(game==null) {
+            throw new GameNotFoundException("Game with gameId "+gameId+" is not registered.");
+        } else if(!game.getOwningPlayer().equals(player) &&
+                !game.getPlayers().contains(player)) {
+            throw new PlayerNotInvitedToGameException("Player with playerId " +
+                    playerId + " is not invited to, or owning, game with gameId " + gameId + " .");
+        }
+
+
+
 		
 	}
 
@@ -513,7 +548,8 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
      * @throws IllegalMoveException
      * @throws IllegalGameStateException
      */
-    protected void reportMove(GameEventEntity gameEventEntity)
+    protected void reportMove(
+            GameEventEntity gameEventEntity)
     throws
             IllegalMoveException,
             IllegalGameStateException {
@@ -542,7 +578,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
         TypedQuery<MoveEntity> movesQuery =
                 entityManager.createNamedQuery("move.findMovesForGameTurn",
                         MoveEntity.class);
-        movesQuery.setParameter("gameTurn", ((MoveEntity)gameEventEntity.getEvent()).getGameTurn());
+        movesQuery.setParameter("gameTurn", ((MoveEntity) gameEventEntity.getEvent()).getGameTurn());
         if(gameEventEntity.getEvent().getGame().getPlayers().size() == movesQuery.getResultList().size()) {
             //
             // Start new turn
@@ -598,6 +634,271 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 
                     gameEventEntity.getGame().addGameCounty(gameCountyEntity);
 
+                    //
+                    // Add Gavleborg
+                    //
+                    countyEntity = new GavleborgEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Gotland
+                    //
+                    countyEntity = new GotlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Halland
+                    //
+                    countyEntity = new HallandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Jamtland
+                    //
+                    countyEntity = new JamtlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Jonkoping
+                    //
+                    countyEntity = new JonkopingEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Kalmar
+                    //
+                    countyEntity = new KalmarEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Kronoberg
+                    //
+                    countyEntity = new KronobergEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Norrbotten
+                    //
+                    countyEntity = new NorrbottenEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Orebro
+                    //
+                    countyEntity = new OrebroEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Ostergotland
+                    //
+                    countyEntity = new OstergotlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Skane
+                    //
+                    countyEntity = new SkaneEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Sodermanland
+                    //
+                    countyEntity = new SodermanlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Stockholm
+                    //
+                    countyEntity = new StockholmEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Uppsala
+                    //
+                    countyEntity = new UppsalaEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Varmland
+                    //
+                    countyEntity = new VarmlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Vasterbotten
+                    //
+                    countyEntity = new VasterbottenEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Vasternorrland
+                    //
+                    countyEntity = new VasternorrlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add Vastmanland
+                    //
+                    countyEntity = new VastmanlandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add VastraGotaland
+                    //
+                    countyEntity = new VastraGotalandEntity();
+                    entityManager.persist(countyEntity);
+
+                    gameCountyEntity = new GameCountyEntity();
+                    gameCountyEntity.setGame(gameEventEntity.getGame());
+                    gameCountyEntity.setCounty(countyEntity);
+                    entityManager.persist(gameCountyEntity);
+
+                    gameEventEntity.getGame().addGameCounty(gameCountyEntity);
+
+                    //
+                    // Add initial funding for players to game.
+                    //
+                    for(Player player : gameEventEntity.getGame().getPlayers()) {
+                        PlayerFundingEntity playerFundingEntity = new PlayerFundingEntity();
+                        playerFundingEntity.setGame(gameEventEntity.getGame());
+                        playerFundingEntity.setPlayer((PlayerEntity)player);
+                        playerFundingEntity.setAmount(PLAYER_INITIAL_GAME_FUNDING);
+                        entityManager.persist(playerFundingEntity);
+
+                        GameEventEntity playerFundingEventEntity = new GameEventEntity();
+                        playerFundingEventEntity.setEvent(playerFundingEntity);
+                        playerFundingEventEntity.setGame(gameEventEntity.getGame());
+                        gameEventEntity.getGame().addEvent(playerFundingEventEntity);
+                        entityManager.persist(playerFundingEventEntity);
+
+                    }
+
                     entityManager.merge(gameEventEntity.getGame());
                 }
                 break;
@@ -625,7 +926,7 @@ public class GameofKrownsControllServiceBeanV1 implements GameofKrownsControllSe
 	 * @throws PlayerNotFoundException
 	 * @throws WrongPasswordException  
 	 */
-	public Player<?> getPlayer(
+	public Player getPlayer(
 			String playerName, 
 			String password)
 	throws 

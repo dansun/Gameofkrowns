@@ -1,77 +1,69 @@
 package nu.danielsundberg.droid.gameofkrowns.game.model;
 
+import nu.danielsundberg.gameofkrowns.domain.Player;
+
 import java.io.Serializable;
 import java.util.Set;
 
-import nu.danielsundberg.gameofkrowns.domain.Player;
-
 /**
- * Player
- * @author dansun
- *
+ * A Game of Krowns Player representation
  */
-public class PlayerImpl implements Player<GameImpl>, Serializable {
+public class PlayerImpl implements Player, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long playerId;
-	
-	private String playerName;
-	
-	private String password;
-	
-	private Set<GameImpl> invitedGames;
-	
-	private Set<GameImpl> ownedGames;
-	
-	private Set<GameImpl> playingGames;
-	
-	public void setPlayerId(long playerId) {
-		this.playerId = playerId;
-	}
+    private Long playerId;
+    private String playerName;
+    private String password;
 
-	public long getPlayerId() {
-		return playerId;
-	}
+    private Set<Long> invitedGameIds;
+    private Set<Long> ownedGameIds;
+    private Set<Long> playingGameIds;
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
 
-	public String getPlayerName() {
-		return playerName;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
+    @Override
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    @Override
+    public long getPlayerId() {
+        return this.playerId;
+    }
 
-	public Set<GameImpl> getInvitedGames() {
-		return this.invitedGames;
-	}
+    @Override
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
-	public void setInvitedGames(Set<GameImpl> invitedGames) {
-		this.invitedGames = invitedGames;
-	}
+    @Override
+    public String getPlayerName() {
+        return this.playerName;
+    }
 
-	public Set<GameImpl> getOwnedGames() {
-		return ownedGames;
-	}
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-	public void setOwnedGames(Set<GameImpl> ownedGames) {
-		this.ownedGames = ownedGames;
-	}
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Set<GameImpl> getPlayingGames() {
-		return playingGames;
-	}
+    @Override
+    public Set<Long> getInvitedGameIds() {
+        return this.invitedGameIds;
+    }
 
-	public void setPlayingGames(Set<GameImpl> playingGames) {
-		this.playingGames = playingGames;
-	}
-	
+    @Override
+    public Set<Long> getOwnedGameIds() {
+        return this.ownedGameIds;
+    }
+
+    @Override
+    public Set<Long> getPlayingGameIds() {
+        return this.playingGameIds;
+    }
+
 }

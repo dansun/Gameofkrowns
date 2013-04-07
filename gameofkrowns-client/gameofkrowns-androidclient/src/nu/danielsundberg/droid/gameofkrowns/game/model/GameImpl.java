@@ -1,134 +1,93 @@
 package nu.danielsundberg.droid.gameofkrowns.game.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import nu.danielsundberg.droid.gameofkrowns.game.model.game.CountyImpl;
 import nu.danielsundberg.gameofkrowns.domain.Game;
 import nu.danielsundberg.gameofkrowns.domain.GameState;
 
-import org.joda.time.DateTime;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
- * A Game of Krowns
- *
- * @author dansun
- *
+ * A Game of Krowns representation
  */
-public class GameImpl implements Game<PlayerImpl, EventImpl, CountyImpl>, Serializable {
+public class GameImpl implements Game, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
     private Long gameId;
-	
-	private String gameName;
-		
-	private Date registrationTime;
-			
-	private PlayerImpl owner;
-	
-	private Set<PlayerImpl> invitedPlayers = new HashSet<PlayerImpl>();
-	
-	private Set<PlayerImpl> players = new HashSet<PlayerImpl>();
+    private String gameName;
+    private GameState gameState;
+    private Date registrationDate;
+    private Long owningPlayerId;
+    private Set<Long> invitedPlayerIds;
+    private Set<Long> playingPlayerIds;
+    private SortedSet<Long> eventIds;
+    private Set<Long> countyIds;
+    private Long currentGameTurnId;
 
-	private SortedSet<EventImpl> events = new TreeSet<EventImpl>();
-	
-	private Set<CountyImpl> counties = new HashSet<CountyImpl>(); 
-	
-	public void setGameId(long gameId) {
-		this.gameId = gameId;
-	}
+    public GameImpl(){
 
-	public Long getGameId() {
-		return gameId;
-	}
+    }
 
-	public void setGameName(String gameName) {
-		this.gameName = gameName;
-	}
+    @Override
+    public void setGameId(long gameId) {
+        this.gameId = gameId;
+    }
 
-	public String getGameName() {
-		return gameName;
-	}
-	
-	/**
-	 * Calculates the games current state
-	 * @return
-	 */
-	public GameState getGameState() {
-		//
-		// Find start and finish events
-		//
-		EventImpl gameStartedEvent = null;
-		EventImpl gameFinishedEvent = null;
-		for(EventImpl event : events) {
-			switch(event.getEventType()) {
-			case GAME_START:
-				gameStartedEvent = event;
-				break;
-			case GAME_FINISH:
-				gameFinishedEvent = event;
-				break;
-			}
-		}
-		//
-		// Parse gamestate
-		//
-		if(gameStartedEvent!=null && gameFinishedEvent!=null) {
-			return GameState.FINISHED;
-		} else if (gameStartedEvent != null && gameFinishedEvent == null) {
-			return GameState.RUNNING;
-		} else {
-			return GameState.CREATED;
-		}
-	}
+    @Override
+    public Long getGameId() {
+        return this.gameId;
+    }
 
-	public DateTime getRegistrationTime() {
-		return registrationTime!=null?new DateTime(registrationTime):null;
-	}
+    @Override
+    public String getGameName() {
+        return this.gameName;
+    }
 
-	public PlayerImpl getOwner() {
-		return owner;
-	}
+    @Override
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
 
-	public void setOwner(PlayerImpl owner) {
-		this.owner = owner;
-	}
+    @Override
+    public GameState getGameState() {
+        return this.gameState;
+    }
 
-	public Set<PlayerImpl> getInvitedPlayers() {
-		return invitedPlayers;
-	}
+    @Override
+    public Date getRegistrationTime() {
+        return this.registrationDate;
+    }
 
-	public void setInvitedPlayers(Set<PlayerImpl> invitedPlayers) {
-		this.invitedPlayers = invitedPlayers;
-	}
+    @Override
+    public Long getOwningPlayerId() {
+        return this.owningPlayerId;
+    }
 
-	public Set<PlayerImpl> getPlayers() {
-		return players;
-	}
+    @Override
+    public Set<Long> getInvitedPlayerIds() {
+        return this.invitedPlayerIds;
+    }
 
-	public void setPlayers(Set<PlayerImpl> players) {
-		this.players = players;
-	}
+    @Override
+    public Set<Long> getPlayerIds() {
+        return this.playingPlayerIds;
+    }
 
-	public SortedSet<EventImpl> getEvents() {
-		return events;
-	}
+    @Override
+    public SortedSet<Long> getEventIds() {
+        return this.eventIds;
+    }
 
-	public void setEvents(SortedSet<EventImpl> events) {
-		this.events = events;
-	}
+    @Override
+    public Set<Long> getCountyIds() {
+        return this.countyIds;
+    }
 
-	public Set<CountyImpl> getCounties() {
-		return counties;
-	}
+    @Override
+    public Long getCurrentGameTurnId() {
+        return this.currentGameTurnId;
+    }
 
-	public void setCounties(Set<CountyImpl> counties) {
-		this.counties = counties;
-	}
-	
 }
